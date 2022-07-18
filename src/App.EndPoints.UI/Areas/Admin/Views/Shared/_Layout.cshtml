@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - پنل ادمین زودکار</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    @*<link rel="stylesheet" href="~/lib/bs-theme/bootstrap-flatly.min.css" />*@
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/App.EndPoints.UI.styles.css" asp-append-version="true" />
+</head>
+<body>
+
+<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">پنل ادمین</a>
+    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+  <div class="navbar-nav">
+    <div class="nav-item text-nowrap">
+      <a class="nav-link px-3" href="#">@User.Identity.Name</a>
+      <a class="nav-link px-3" href="#">خروج</a>
+    </div>
+  </div>
+</header>
+
+<div class="container-fluid">
+    <div class="row">
+
+        <partial name="_AdminSidebar"/>
+
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            @RenderBody()
+        </main>
+
+    </div>
+</div>
+<footer class="border-top footer text-muted" style="direction: ltr">
+    <div class="container">
+        &copy; 2022 - ZoodKar - <a asp-area="" asp-controller="Home" asp-action="Privacy">حریم خصوصی</a>
+    </div>
+</footer>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+                            @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
