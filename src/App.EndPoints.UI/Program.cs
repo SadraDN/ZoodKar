@@ -1,4 +1,5 @@
-using App.Domain.Core.Entities;
+using App.Domain.Core.BaseData.Entities;
+using App.Domain.Core.User.Entities;
 using App.Infrastructures.Database.SqlServer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -20,12 +21,9 @@ builder.Services.AddIdentity<AppUser, IdentityRole<int>>(
             options.SignIn.RequireConfirmedEmail = false;
             options.SignIn.RequireConfirmedPhoneNumber = false;
 
-            //options.User.AllowedUserNameCharacters
-            //options.User.RequireUniqueEmail
-
             options.Password.RequireDigit = false;
             options.Password.RequireLowercase = false;
-            options.Password.RequireNonAlphanumeric = true;
+            options.Password.RequireNonAlphanumeric = false;
             options.Password.RequireUppercase = false;
             options.Password.RequiredLength = 3;
             options.Password.RequiredUniqueChars = 1;
