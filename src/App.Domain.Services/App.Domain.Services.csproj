@@ -11,8 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="BaseData\" />
     <Folder Include="HomeServices\" />
+    <Folder Include="User\" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,6 @@
-﻿using App.Domain.Core.BaseData.Contracts.Repositories;
-using App.Domain.Core.BaseData.Dtos;
+﻿using App.Domain.Core.HomeService.Contracts.Repositories;
+using App.Domain.Core.HomeService.Dtos;
+using App.Domain.Core.HomeService.Entities;
 using App.Infrastructures.Database.SqlServer;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -8,24 +9,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace App.Infrastructures.Repository.Ef.BaseData
+namespace App.Infrastructures.Repository.Ef.HomeServices
 {
     public class AppFileRepository : IAppFileRepository
     {
         private readonly AppDbContext _context;
         public AppFileRepository(AppDbContext Context)
         {
-            _context = Context;   
+            _context = Context;
         }
         public async Task Add(AppFileDto dto, CancellationToken cancellationToken)
         {
-           App.Domain.Core.BaseData.Entities.AppFile record = new()
-           {
-               EntityId = dto.EntityId,
-               FileAddress = dto.FileAddress,
-               CreatedUserId = dto.CreatedUserId,
-               CreatedAt = dto.CreatedAt,
-           };
+            AppFile record = new()
+            {
+                EntityId = dto.EntityId,
+                FileAddress = dto.FileAddress,
+                CreatedUserId = dto.CreatedUserId,
+                CreatedAt = dto.CreatedAt,
+            };
             await _context.AddAsync(record, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
         }
@@ -83,6 +84,6 @@ namespace App.Infrastructures.Repository.Ef.BaseData
             }).ToListAsync(cancellationToken);
         }
 
-        
+
     }
 }

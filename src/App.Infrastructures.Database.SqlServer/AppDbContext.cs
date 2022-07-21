@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using App.Domain.Core.BaseData.Entities;
 using App.Domain.Core.HomeService.Entities;
 using App.Domain.Core.User.Entities;
 using Microsoft.AspNetCore.Identity;

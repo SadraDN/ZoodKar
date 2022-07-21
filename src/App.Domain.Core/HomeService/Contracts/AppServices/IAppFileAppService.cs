@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace App.Domain.Core.BaseData.Contracts.Services
+namespace App.Domain.Core.HomeService.Contracts.AppServices
 {
-    public interface IEntityService
+    public interface IAppFileAppService
     {
     }
 }

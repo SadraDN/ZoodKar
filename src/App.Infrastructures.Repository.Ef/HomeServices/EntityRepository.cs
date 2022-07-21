@@ -1,5 +1,6 @@
-﻿using App.Domain.Core.BaseData.Contracts.Repositories;
-using App.Domain.Core.BaseData.Dtos;
+﻿using App.Domain.Core.HomeService.Contracts.Repositories;
+using App.Domain.Core.HomeService.Dtos;
+using App.Domain.Core.HomeService.Entities;
 using App.Infrastructures.Database.SqlServer;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -8,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace App.Infrastructures.Repository.Ef.BaseData
+namespace App.Infrastructures.Repository.Ef.HomeServices
 {
     public class EntityRepository : IEntityRepository
     {
@@ -19,7 +20,7 @@ namespace App.Infrastructures.Repository.Ef.BaseData
         }
         public async Task Add(EntityDto dto, CancellationToken cancellationToken)
         {
-            App.Domain.Core.BaseData.Entities.Entity record = new()
+            Entity record = new()
             {
                 Title = dto.Title,
             };

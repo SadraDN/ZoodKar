@@ -1,11 +1,11 @@
-﻿using App.Domain.Core.BaseData.Dtos;
+﻿using App.Domain.Core.HomeService.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace App.Domain.Core.BaseData.Contracts.Repositories
+namespace App.Domain.Core.HomeService.Contracts.Repositories
 {
     public interface IAppFileRepository
     {

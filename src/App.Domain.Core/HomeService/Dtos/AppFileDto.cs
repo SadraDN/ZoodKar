@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace App.Domain.Core.BaseData.Dtos
+namespace App.Domain.Core.HomeService.Dtos
 {
     public class AppFileDto
     {

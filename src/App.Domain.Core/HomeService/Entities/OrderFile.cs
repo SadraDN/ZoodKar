@@ -1,6 +1,4 @@
-﻿using App.Domain.Core.BaseData.Entities;
-
-namespace App.Domain.Core.HomeService.Entities
+﻿namespace App.Domain.Core.HomeService.Entities
 {
     public partial class OrderFile
     {

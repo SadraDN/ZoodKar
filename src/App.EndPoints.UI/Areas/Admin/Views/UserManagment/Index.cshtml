@@ -1,0 +1,77 @@
+﻿@using App.EndPoints.UI.Areas.Admin.Models.ViewModels.UserManagment
+@model List<UserOutputVM>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="row">
+    <div class="col-6">
+        <h2>لیست کاربران</h2>
+    </div>
+    <div class="col-6 text-start">
+        <form asp-controller="UserManagment" asp-action="Index">
+            <p>
+                <label for="search">Search: </label>
+                <input type="text" name="SearchStrin" id="search" />
+                <input type="submit" value="جستجو" />
+            </p>
+        </form>
+    </div>
+</div>
+<a asp-area="Admin" asp-controller="UserManagment" asp-action="Create" class="btn btn-success text-end">ایجاد کاربر</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>شناسه</th>
+            <th>نام کاربری</th>
+            <th>ایمیل</th>
+            <th>نقش</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <th>@user.Id</th>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td>
+                    @foreach (var rol in user.Roles)
+                    {
+                        if (user.Roles.Count - 1 == user.Roles.IndexOf(rol))
+                        {
+                            <span> @rol</span>
+                            break;
+                        }
+                        <span>@rol / </span>
+
+                    }
+                </td>
+                <td>
+                    <a asp-controller="UserManagment" asp-action="Edit" asp-route-id="@user.Id" class="btn btn-warning">ویرایش</a>
+                    <a class="btn btn-danger" asp-controller="UserManagment" asp-action="Delete" asp-route-id="@user.Id">حذف</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-danger" id="myModalLabel"></h5>
+                <div class="text-left">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="modal-body" id="bodymodal">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

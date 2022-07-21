@@ -24,7 +24,24 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">حریم خصوصی</a>
-                        </li>
+                        </li> 
+                    </ul>
+
+                    <ul>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="mb-3"><p>@User.Identity.Name</p></li>
+                            <li><a asp-controller="Account" asp-action="Logout" class="btn btn-danger text-white">خروج از حساب کاربری</a></li>
+                        }
+                        else
+                        {
+                            <li>
+                                <a href="@Url.Action("Register", "Account")">ثبت نام</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Login", "Account")">ورود</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
@@ -35,7 +52,7 @@
             @RenderBody()
         </main>
     </div>
-    
+
     <footer class="border-top footer text-muted" style="direction: ltr">
         <div class="container">
             &copy; 2022 - ZoodKar - <a asp-area="" asp-controller="Home" asp-action="Privacy">حریم خصوصی</a>

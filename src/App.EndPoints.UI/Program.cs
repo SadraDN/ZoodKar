@@ -1,4 +1,4 @@
-using App.Domain.Core.BaseData.Entities;
+
 using App.Domain.Core.User.Entities;
 using App.Infrastructures.Database.SqlServer;
 using Microsoft.AspNetCore.Identity;
@@ -31,6 +31,7 @@ builder.Services.AddIdentity<AppUser, IdentityRole<int>>(
         })
     .AddEntityFrameworkStores<AppDbContext>();
 
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 var app = builder.Build();
 

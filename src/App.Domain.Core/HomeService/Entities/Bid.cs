@@ -1,4 +1,4 @@
-﻿using App.Domain.Core.BaseData.Entities;
+﻿
 using App.Domain.Core.User.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
 

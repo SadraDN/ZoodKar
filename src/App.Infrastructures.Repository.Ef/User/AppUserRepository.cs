@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace App.Infrastructures.Repository.Ef.BaseData
+namespace App.Infrastructures.Repository.Ef.User
 {
     public class AppUserRepository : IAppUserRepository
     {
@@ -19,19 +19,18 @@ namespace App.Infrastructures.Repository.Ef.BaseData
             , UserManager<AppUser> UserManager)
         {
             _context = context;
-            _userManager=UserManager;
+            _userManager = UserManager;
         }
 
         public async Task Add(AppUserDto dto, string password)
         {
-            App.Domain.Core.User.Entities.AppUser record = new()
+            AppUser record = new()
             {
-                FirstName = dto.FirstName,
-                LastName = dto.LastName,
+                Name = dto.Name,
                 PictureFileId = dto.PictureFileId,
                 HomeAddress = dto.HomeAddress,
             };
-            await _userManager.CreateAsync(record,password);
+            await _userManager.CreateAsync(record, password);
         }
 
         public Task Update(AppUserDto dto)
@@ -59,6 +58,6 @@ namespace App.Infrastructures.Repository.Ef.BaseData
             throw new NotImplementedException();
         }
 
-      
+
     }
 }

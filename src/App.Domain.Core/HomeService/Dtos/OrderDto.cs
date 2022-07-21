@@ -1,6 +1,4 @@
-﻿using App.Domain.Core.BaseData.Dtos;
-
-namespace App.Domain.Core.HomeService.Dtos
+﻿namespace App.Domain.Core.HomeService.Dtos
 {
     public class OrderDto
     {

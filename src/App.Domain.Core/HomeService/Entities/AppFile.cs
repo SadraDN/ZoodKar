@@ -1,8 +1,7 @@
-﻿using App.Domain.Core.HomeService.Entities;
-using App.Domain.Core.User.Entities;
+﻿using App.Domain.Core.User.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace App.Domain.Core.BaseData.Entities
+namespace App.Domain.Core.HomeService.Entities
 {
     public partial class AppFile
     {
