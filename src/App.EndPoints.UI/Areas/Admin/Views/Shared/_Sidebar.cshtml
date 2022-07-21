@@ -1,0 +1,70 @@
+﻿<nav id="sidebar" class="sidebar js-sidebar">
+    <div class="sidebar-content js-simplebar">
+        <a class="sidebar-brand" href="index.html">
+            <span class="align-middle">زودکار</span>
+        </a>
+
+        <ul class="sidebar-nav">
+            <li class="sidebar-item active">
+                <a class="sidebar-link" asp-area="admin" asp-controller="Dashboard" asp-action="Index" >
+                    <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">صفحه اصلی</span>
+                </a>
+            </li>
+            <li class="sidebar-header">
+                کاربران
+            </li>
+            <li class="sidebar-item">
+                    <a class="sidebar-link" asp-area="Admin" asp-controller = "UserManagment" asp-action="Index">
+                     <i class="align-middle" data-feather="sliders"></i> <span class="align-middle"> مدیریت کاربران</span>
+                    </a>
+                 </li>
+            <li class="sidebar-header">
+                مدیریت خدمات
+            </li>
+            
+            <li class="sidebar-item">
+                <a class="sidebar-link" asp-area="Admin" asp-controller="Category" asp-action="Index">
+                    <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">سفارشات</span>
+                </a>
+            </li>
+            
+            <li class="sidebar-item">
+                <a class="sidebar-link" asp-area="Admin" asp-controller="Model" asp-action="Index">
+                    <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">نظرات</span>
+                </a>
+            </li>
+
+            <li class="sidebar-item">
+                <a class="sidebar-link" asp-area="Admin" asp-controller="Brand" asp-action="Index">
+                    <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">فایل ها</span>
+                </a>
+            </li>
+
+            <li class="sidebar-item">
+                <a class="sidebar-link" asp-area="Admin" asp-controller="Color" asp-action="Index">
+                    <i class="align-middle" data-feather="user-plus"></i> <span class="align-middle">رنگ ها</span>
+                </a>
+            </li>
+
+            <li class="sidebar-header">
+                مدیریت سفارشات
+            </li>
+
+            <li class="sidebar-item">
+                <a class="sidebar-link" asp-area="Admin" asp-controller="Orders" asp-action="Index">
+                    <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">مشاهده لیست سفارشات</span>
+                </a>
+            </li>
+
+            <li class="sidebar-header">
+                مدیریت کاربران
+            </li>
+
+            <li class="sidebar-item">
+                <a class="sidebar-link" asp-area="Admin" asp-controller="UserManagment" asp-action="Index">
+                    <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">مشاهده لیست کاربران</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>

@@ -5,10 +5,10 @@ namespace App.EndPoints.UI.Models
     public class LoginViewModel
     {
 
+
         [Required]
-        [EmailAddress]
-        [Display(Name = "ایمیل")]
-        public string Email { get; set; }
+        [Display(Name = "نام کاربری")]
+        public string UserName { get; set; }
 
         [Required]
         [DataType(DataType.Password)]

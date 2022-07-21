@@ -5,6 +5,14 @@ namespace App.EndPoints.UI.Models
     public class RegisterViewModel
     {
         [Required]
+        [Display(Name = "نام کاربری")]
+        public string UserName { get; set; }
+
+        [Required]
+        [Display(Name = "نام و نام خانوادگی")]
+        public string Name { get; set; }
+
+        [Required]
         [EmailAddress]
         [Display(Name = "ایمیل")]
         public string Email { get; set; }
