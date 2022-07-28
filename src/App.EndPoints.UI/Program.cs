@@ -20,7 +20,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.ConfigureApplicationCookie(options =>{
     options.LoginPath = "/Account/Login";
-    options.AccessDeniedPath = "/Home";
+    options.AccessDeniedPath = "/Account/AccessDenied";
 });
 
 // Add services to the container.

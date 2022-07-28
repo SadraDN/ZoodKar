@@ -27,9 +27,9 @@ namespace App.EndPoints.UI.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Login(LoginViewModel model,string? ReturnUrl)
+        public async Task<IActionResult> Login(LoginViewModel model, string? ReturnUrl)
         {
-            
+
             if (ModelState.IsValid)
             {
                 var user = new AppUserDto()
@@ -40,7 +40,10 @@ namespace App.EndPoints.UI.Controllers
                 var result = await _appUserAppService.Login(user, model.RememberMe);
                 if (result.Succeeded)
                 {
-                    return LocalRedirect(ReturnUrl);
+                    if (ReturnUrl != null)
+                        return LocalRedirect(ReturnUrl);
+                    else
+                        return RedirectToAction("Index", "Home");
                 }
 
                 ModelState.AddModelError(string.Empty, "خطا در فرآیند لاگین");
@@ -91,6 +94,11 @@ namespace App.EndPoints.UI.Controllers
                 }
             }
             return View(model);
+        }
+
+        public IActionResult AccessDenied()
+        {
+            return View();
         }
     }
 }

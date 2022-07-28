@@ -101,7 +101,7 @@ namespace App.Infrastructures.Database.SqlServer
                 entity.HasOne(x => x.Customer)
                  .WithMany(x => x.CustomerOrders)
                  .HasForeignKey(x => x.CustomerUserId)
-                 .OnDelete(DeleteBehavior.ClientSetNull);
+                 .OnDelete(DeleteBehavior.Cascade);
 
                 entity.HasOne(x => x.Expert)
                 .WithMany(x => x.ExpertOrders)
@@ -155,13 +155,13 @@ namespace App.Infrastructures.Database.SqlServer
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.ServiceComments)
                     .HasForeignKey(d => d.OrderId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_ServiceComments_Orders");
 
                 entity.HasOne(d => d.Service)
                     .WithMany(p => p.ServiceComments)
                     .HasForeignKey(d => d.ServiceId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_ServiceComments_Services");
             });
 

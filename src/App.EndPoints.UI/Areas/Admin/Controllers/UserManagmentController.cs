@@ -134,9 +134,9 @@ namespace App.EndPoints.UI.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var user = await _userManager.FindByIdAsync(id);
+            var user = await _userManager.FindByIdAsync(id.ToString());
             await _userManager.DeleteAsync(user);
             return RedirectToAction(nameof(Index));
         }
