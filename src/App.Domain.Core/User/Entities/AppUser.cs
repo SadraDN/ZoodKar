@@ -13,5 +13,7 @@ public class AppUser : IdentityUser<int>
     public virtual List<AppFile> AppFiles { get; set; }
     public virtual List<ExpertFavoriteCategory> ExpertFavoriteCategories { get; set; }
     public virtual List<Bid> Bids { get; set; }
-    public virtual List<Order> Orders { get; set; }
+    public virtual List<Order> CustomerOrders { get; set; }
+    public virtual List<Order> ExpertOrders { get; set; }
+
 }

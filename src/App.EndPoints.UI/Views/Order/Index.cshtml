@@ -1,0 +1,13 @@
+﻿@using App.EndPoints.UI.Models.Order
+@model List<CategoryVM>
+
+@foreach(var category in Model)
+{
+    <div class="card" style="width: 18rem;">
+  <div class="card-body">
+    <h5 class="card-title">@category.Title</h5>
+    <a asp-controller="Order" asp-action="ServiceList" asp-route-categoryId="@category.Id" class="btn btn-primary">سرویس ها</a>
+  </div>
+</div>
+}
+

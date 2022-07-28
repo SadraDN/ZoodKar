@@ -1,4 +1,6 @@
-﻿@model LoginViewModel
+﻿@using App.EndPoints.UI.Models.Account
+@model LoginViewModel
+
 
 @{
     ViewData["Title"] = "ورود";
@@ -6,6 +8,7 @@
 
 <div class="m-5 p-5">
     <form asp-controller="Account" asp-action="Login" method="post">
+    
         <h4>ورود به حساب کاربری</h4>
         <hr />
         <div asp-validation-summary="All" class="text-danger"></div>
@@ -31,7 +34,7 @@
 
         </div>
 
-        <input type="submit" class="btn btn-primary" value="ورود" />
+        <input asp-route-ReturnUrl=@ViewBag.ReturnUrl  type="submit" class="btn btn-primary" value="ورود" />
     </form>
 </div>
 

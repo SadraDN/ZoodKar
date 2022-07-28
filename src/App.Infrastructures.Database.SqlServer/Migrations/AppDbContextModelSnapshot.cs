@@ -22,7 +22,7 @@ namespace App.Infrastructures.Database.SqlServer.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("App.Domain.Core.BaseData.Entities.AppFile", b =>
+            modelBuilder.Entity("App.Domain.Core.HomeService.Entities.AppFile", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -52,24 +52,6 @@ namespace App.Infrastructures.Database.SqlServer.Migrations
                     b.HasIndex("EntityId");
 
                     b.ToTable("Files");
-                });
-
-            modelBuilder.Entity("App.Domain.Core.BaseData.Entities.Entity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Entities");
                 });
 
             modelBuilder.Entity("App.Domain.Core.HomeService.Entities.Bid", b =>
@@ -123,6 +105,24 @@ namespace App.Infrastructures.Database.SqlServer.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("App.Domain.Core.HomeService.Entities.Entity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Entities");
+                });
+
             modelBuilder.Entity("App.Domain.Core.HomeService.Entities.ExpertFavoriteCategory", b =>
                 {
                     b.Property<int>("Id")
@@ -168,8 +168,15 @@ namespace App.Infrastructures.Database.SqlServer.Migrations
                     b.Property<int?>("FinalExpertUserId")
                         .HasColumnType("int");
 
+                    b.Property<string>("SerivceAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("ServiceBasePrice")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("ServiceDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("ServiceId")
                         .HasColumnType("int");
@@ -180,6 +187,8 @@ namespace App.Infrastructures.Database.SqlServer.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerUserId");
+
+                    b.HasIndex("FinalExpertUserId");
 
                     b.HasIndex("ServiceId");
 
@@ -543,7 +552,7 @@ namespace App.Infrastructures.Database.SqlServer.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("App.Domain.Core.BaseData.Entities.AppFile", b =>
+            modelBuilder.Entity("App.Domain.Core.HomeService.Entities.AppFile", b =>
                 {
                     b.HasOne("App.Domain.Core.User.Entities.AppUser", "AppUser")
                         .WithMany("AppFiles")
@@ -551,7 +560,7 @@ namespace App.Infrastructures.Database.SqlServer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("App.Domain.Core.BaseData.Entities.Entity", "Entity")
+                    b.HasOne("App.Domain.Core.HomeService.Entities.Entity", "Entity")
                         .WithMany("Files")
                         .HasForeignKey("EntityId")
                         .IsRequired()
@@ -602,9 +611,13 @@ namespace App.Infrastructures.Database.SqlServer.Migrations
 
             modelBuilder.Entity("App.Domain.Core.HomeService.Entities.Order", b =>
                 {
-                    b.HasOne("App.Domain.Core.User.Entities.AppUser", "AppUser")
-                        .WithMany("Orders")
+                    b.HasOne("App.Domain.Core.User.Entities.AppUser", "Customer")
+                        .WithMany("CustomerOrders")
                         .HasForeignKey("CustomerUserId");
+
+                    b.HasOne("App.Domain.Core.User.Entities.AppUser", "Expert")
+                        .WithMany("ExpertOrders")
+                        .HasForeignKey("FinalExpertUserId");
 
                     b.HasOne("App.Domain.Core.HomeService.Entities.Service", "Service")
                         .WithMany("Orders")
@@ -618,7 +631,9 @@ namespace App.Infrastructures.Database.SqlServer.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_Orders_OrderStatuses");
 
-                    b.Navigation("AppUser");
+                    b.Navigation("Customer");
+
+                    b.Navigation("Expert");
 
                     b.Navigation("Service");
 
@@ -627,7 +642,7 @@ namespace App.Infrastructures.Database.SqlServer.Migrations
 
             modelBuilder.Entity("App.Domain.Core.HomeService.Entities.OrderFile", b =>
                 {
-                    b.HasOne("App.Domain.Core.BaseData.Entities.AppFile", "File")
+                    b.HasOne("App.Domain.Core.HomeService.Entities.AppFile", "File")
                         .WithMany("OrderFiles")
                         .HasForeignKey("FileId")
                         .IsRequired()
@@ -676,7 +691,7 @@ namespace App.Infrastructures.Database.SqlServer.Migrations
 
             modelBuilder.Entity("App.Domain.Core.HomeService.Entities.ServiceFile", b =>
                 {
-                    b.HasOne("App.Domain.Core.BaseData.Entities.AppFile", "File")
+                    b.HasOne("App.Domain.Core.HomeService.Entities.AppFile", "File")
                         .WithMany("ServiceFiles")
                         .HasForeignKey("FileId")
                         .IsRequired()
@@ -744,16 +759,11 @@ namespace App.Infrastructures.Database.SqlServer.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("App.Domain.Core.BaseData.Entities.AppFile", b =>
+            modelBuilder.Entity("App.Domain.Core.HomeService.Entities.AppFile", b =>
                 {
                     b.Navigation("OrderFiles");
 
                     b.Navigation("ServiceFiles");
-                });
-
-            modelBuilder.Entity("App.Domain.Core.BaseData.Entities.Entity", b =>
-                {
-                    b.Navigation("Files");
                 });
 
             modelBuilder.Entity("App.Domain.Core.HomeService.Entities.Category", b =>
@@ -761,6 +771,11 @@ namespace App.Infrastructures.Database.SqlServer.Migrations
                     b.Navigation("ExpertFavoriteCategories");
 
                     b.Navigation("Services");
+                });
+
+            modelBuilder.Entity("App.Domain.Core.HomeService.Entities.Entity", b =>
+                {
+                    b.Navigation("Files");
                 });
 
             modelBuilder.Entity("App.Domain.Core.HomeService.Entities.Order", b =>
@@ -792,9 +807,11 @@ namespace App.Infrastructures.Database.SqlServer.Migrations
 
                     b.Navigation("Bids");
 
+                    b.Navigation("CustomerOrders");
+
                     b.Navigation("ExpertFavoriteCategories");
 
-                    b.Navigation("Orders");
+                    b.Navigation("ExpertOrders");
                 });
 #pragma warning restore 612, 618
         }

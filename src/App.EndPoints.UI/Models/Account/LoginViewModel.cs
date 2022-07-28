@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace App.EndPoints.UI.Models
+namespace App.EndPoints.UI.Models.Account
 {
     public class LoginViewModel
     {
@@ -17,6 +17,7 @@ namespace App.EndPoints.UI.Models
 
         [Display(Name = "من را به خاطر بسپار")]
         public bool RememberMe { get; set; }
+
     }
 }
 

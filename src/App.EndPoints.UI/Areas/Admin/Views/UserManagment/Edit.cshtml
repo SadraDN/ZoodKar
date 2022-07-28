@@ -7,16 +7,25 @@
 <h3>ویرایش کاربر</h3>
 
 <form asp-area="Admin" asp-controller="UserManagment" asp-action="Edit" method="post">
+
     <div class="form-group mb-3">
         <label asp-for="UserName"></label>
-        <input asp-for="UserName" class="form-control"/>
+        <input asp-for="UserName" class="form-control" />
         <span asp-validation-for="UserName"></span>
     </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name"></span>
+    </div>
+
     <div class="form-group mb-3">
         <label asp-for="Email"></label>
-        <input asp-for="Email" class="form-control"/>
+        <input asp-for="Email" class="form-control" />
         <span asp-validation-for="Email"></span>
     </div>
+
     <div class="form-group row p-3">
         <div class="col-4">
             <label asp-for="Roles"></label>
@@ -32,23 +41,24 @@
             <span asp-validation-for="Roles" class="text-danger"></span>
         </div>
     </div>
+
     <div class="form-group mb-3">
         <label asp-for="Password"></label>
-        <input asp-for="Password" class="form-control"/>
+        <input asp-for="Password" class="form-control" />
     </div>
     <div class="form-group mb-3">
         <label asp-for="ConfirmPassword"></label>
-        <input asp-for="ConfirmPassword" class="form-control"/>
+        <input asp-for="ConfirmPassword" class="form-control" />
     </div>
-    <input type="submit" value="ویرایش کاربر" class="btn btn-warning"/>
+    <input type="submit" value="ویرایش کاربر" class="btn btn-warning" />
 </form>
 @section Scripts{
-    <script>
+<script>
 
-        $(function() {
-            $(".select-chosen").chosen({rtl: true});
-        });
+    $(function() {
+        $(".select-chosen").chosen({rtl: true});
+    });
 
 
-    </script>
+</script>
 }

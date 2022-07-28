@@ -1,0 +1,71 @@
+﻿@using App.EndPoints.UI.Areas.Admin.Models.ViewModels.Order
+@model OrderUpdateVM
+<form method="post" asp-controller="Order" asp-action="Edit">
+
+    <div class="border p-3">
+        <div class="form-group row">
+            <h2 class="text-info pl-3">ویرایش سفارش</h2>
+        </div>
+
+
+        <div class="row">
+            <div class="col-8">
+                <div class="form-group row p-3">
+                    <div class="col-4">
+                        <label asp-for="Id"></label>
+                    </div>
+                    <div class="col-8">
+                        <input asp-for="Id" class="form-control" readonly />
+                        <span asp-validation-for="Id" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row p-3">
+                    <div class="col-4">
+                        <label asp-for="ServiceBasePrice"></label>
+                    </div>
+                    <div class="col-8">
+                        <input asp-for="ServiceBasePrice" class="form-control" />
+                        <span asp-validation-for="ServiceBasePrice" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row p-3">
+                    <div class="col-4">
+                        <label asp-for="StatusId"></label>
+                    </div>
+                    <div class="col-8">
+                        <select asp-for="StatusId" class="select-chosen" asp-items="ViewBag.Statuses">
+                            <option disabled selected>انتخاب وضعیت</option>
+                        </select>
+                        <span asp-validation-for="StatusId" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="d-inline-flex justify-content-around">
+                        <button type="submit" class="btn btn-primary mx-1">ویرایش</button>
+                        <div>
+                            <a asp-controller="Order" asp-action="Index" class="btn btn-success">بازگشت</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+
+@section Scripts{
+    @{
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+
+                $(function() {
+            $(".select-chosen").chosen({rtl: true});
+        });
+
+    </script>
+}
+
+}

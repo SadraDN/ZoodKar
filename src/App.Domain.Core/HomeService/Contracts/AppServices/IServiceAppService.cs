@@ -9,11 +9,11 @@ namespace App.Domain.Core.HomeService.Contracts.AppServices
 {
     public interface IServiceAppService
     {
-        Task<List<ServiceCommentDto>> GetAll(CancellationToken cancellationToken);
-        Task<ServiceCommentDto>? GetByOrderId(int orderId, CancellationToken cancellationToken);
-        Task<ServiceCommentDto>? GetById(int id, CancellationToken cancellationToken);
-        Task Set(ServiceCommentDto dto, CancellationToken cancellationToken);
-        Task Update(ServiceCommentDto dto, CancellationToken cancellationToken);
+        Task<List<ServiceDto>> GetAll(CancellationToken cancellationToken);
+        Task<ServiceDto>? GetByOrderId(int orderId, CancellationToken cancellationToken);
+        Task<ServiceDto>? GetById(int id, CancellationToken cancellationToken);
+        Task Set(ServiceDto dto, CancellationToken cancellationToken);
+        Task Update(ServiceDto dto, CancellationToken cancellationToken);
         Task Delete(int id, CancellationToken cancellationToken);
     }
 }

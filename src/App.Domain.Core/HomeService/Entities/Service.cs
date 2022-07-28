@@ -15,7 +15,7 @@
         public string? ShortDescription { get; set; }
         public int Price { get; set; }
 
-        public virtual Category Category { get; set; } = null!;
+        public virtual Category Category { get; set; } 
         public virtual ICollection<Order> Orders { get; set; }
         public virtual ICollection<ServiceComment> ServiceComments { get; set; }
         public virtual ICollection<ServiceFile> ServiceFiles { get; set; }

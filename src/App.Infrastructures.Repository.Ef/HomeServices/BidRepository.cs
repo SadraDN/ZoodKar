@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace App.Infrastructures.Repository.Ef.HomeServices
 {
-    public class BidRepository: IBidsRepository
+    public class BidRepository: IBidRepository
     {
         private readonly AppDbContext _context;
         public BidRepository(AppDbContext context)
@@ -38,7 +38,6 @@ namespace App.Infrastructures.Repository.Ef.HomeServices
             record.ExpertUserId = dto.ExpertUserId;
             record.SuggestedPrice = dto.SuggestedPrice;
             record.IsApproved = dto.IsApproved;
-            record.CreatedAt = dto.CreatedAt;
             await _context.SaveChangesAsync(cancellationToken);
         }
 
@@ -84,11 +83,28 @@ namespace App.Infrastructures.Repository.Ef.HomeServices
                 Id = p.Id,
                 OrderId = p.OrderId,
                 ExpertUserId = p.ExpertUserId,
+                ExpertName = p.AppUser.Name,
                 SuggestedPrice = p.SuggestedPrice,
                 IsApproved = p.IsApproved,
                 CreatedAt = p.CreatedAt,
 
             }).ToListAsync(cancellationToken);
+        }
+
+        public async Task<BidDto>? GetById(int id, CancellationToken cancellationToken)
+        {
+            var record = await _context.Bids.Where(p => p.Id == id).Select(p => new BidDto()
+            {
+                Id = p.Id,
+                OrderId= p.OrderId,
+                ExpertUserId= p.ExpertUserId,
+                ExpertName= p.AppUser.Name,
+                SuggestedPrice= p.SuggestedPrice,
+                IsApproved= p.IsApproved,
+                CreatedAt= p.CreatedAt,
+                
+            }).SingleOrDefaultAsync();
+            return record;
         }
     }
 }

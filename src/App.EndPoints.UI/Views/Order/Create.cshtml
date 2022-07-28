@@ -1,0 +1,62 @@
+﻿@using App.EndPoints.UI.Models.Order
+@model OrderInputVM
+<form method="post" asp-controller="Order" asp-action="Create">
+
+    <div class="border p-3">
+        <div class="form-group row">
+            <h2 class="text-info pl-3">ثبت سفارش</h2>
+        </div>
+
+        <div class="row">
+            <div class="col-8">
+
+                <div class="form-group row p-3">
+                    <div class="col-4">
+                        <label asp-for="ServiceTime"></label>
+                    </div>
+                    <div class="col-8">
+                        <input type="datetime-local" asp-for="ServiceTime" class="form-control" />
+                        <span asp-validation-for="ServiceTime" class="text-danger"></span>
+                    </div>
+                </div>
+
+                 <div class="form-group row p-3">
+                    <div class="col-4">
+                        <label asp-for="Address"></label>
+                    </div>
+                    <div class="col-8">
+                        <input type="text" asp-for="Address" class="form-control" />
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+                </div>
+
+
+
+                <div class="form-group">
+                    <div class="d-inline-flex justify-content-around">
+                        <button type="submit" asp-route-Id="@ViewBag.ServiceId" class="btn btn-primary mx-1">ثبت سفارش</button>
+                        <div>
+                            <a asp-controller="Order" asp-action="Index"  class="btn btn-success">بازگشت</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+
+@section Scripts{
+    @{
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+
+                $(function() {
+            $(".select-chosen").chosen({rtl: true});
+        });
+
+    </script>
+}
+
+}
+

@@ -1,0 +1,15 @@
+﻿@using App.EndPoints.UI.Models.Order
+@model List<ServiceVM>
+
+@foreach(var service in Model)
+{
+    <div class="card" style="width: 18rem;">
+  <div class="card-body">
+      <img class="card-img-top" src="~/img/photos/ServicePic.jpeg" alt="Card image cap">
+    <h5 class="card-title">@service.Title</h5>
+    <p class="card-text">@service.ShortDescription</p>
+    <p class="card-text"> <strong>قیمت پایه @service.Price هزارتومان </strong></p>
+    <a asp-controller="Order" asp-action="Create" asp-route-serviceId="@service.Id" class="btn btn-primary">سفارش سرویس</a>
+  </div>
+</div>
+}

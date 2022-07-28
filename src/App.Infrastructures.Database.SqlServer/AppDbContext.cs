@@ -31,7 +31,7 @@ namespace App.Infrastructures.Database.SqlServer
         public virtual DbSet<Service> Services { get; set; } = null!;
         public virtual DbSet<ServiceComment> ServiceComments { get; set; } = null!;
         public virtual DbSet<ServiceFile> ServiceFiles { get; set; } = null!;
-        
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -97,6 +97,16 @@ namespace App.Infrastructures.Database.SqlServer
                     .HasForeignKey(d => d.StatusId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Orders_OrderStatuses");
+
+                entity.HasOne(x => x.Customer)
+                 .WithMany(x => x.CustomerOrders)
+                 .HasForeignKey(x => x.CustomerUserId)
+                 .OnDelete(DeleteBehavior.ClientSetNull);
+
+                entity.HasOne(x => x.Expert)
+                .WithMany(x => x.ExpertOrders)
+                .HasForeignKey(x => x.FinalExpertUserId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
             modelBuilder.Entity<OrderFile>(entity =>

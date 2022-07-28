@@ -1,10 +1,27 @@
 
+using App.Domain.AppServices.HomeServices;
+using App.Domain.AppServices.User;
+using App.Domain.Core.HomeService.Contracts.AppServices;
+using App.Domain.Core.HomeService.Contracts.Repositories;
+using App.Domain.Core.HomeService.Contracts.Services;
+using App.Domain.Core.User.Contracts.AppServices;
+using App.Domain.Core.User.Contracts.Repositories;
+using App.Domain.Core.User.Contracts.Services;
 using App.Domain.Core.User.Entities;
+using App.Domain.Services.HomeServices;
+using App.Domain.Services.User;
 using App.Infrastructures.Database.SqlServer;
+using App.Infrastructures.Repository.Ef.HomeServices;
+using App.Infrastructures.Repository.Ef.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.ConfigureApplicationCookie(options =>{
+    options.LoginPath = "/Account/Login";
+    options.AccessDeniedPath = "/Home";
+});
 
 // Add services to the container.
 builder.Services.AddControllersWithViews()
@@ -31,7 +48,44 @@ builder.Services.AddIdentity<AppUser, IdentityRole<int>>(
         })
     .AddEntityFrameworkStores<AppDbContext>();
 
-builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+//builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddHttpContextAccessor();
+
+#region "AppUser"
+builder.Services.AddScoped<IAppUserAppService, AppUserAppService>();
+builder.Services.AddScoped<IAppUserService, AppUserService>();
+builder.Services.AddScoped<IAppUserRepository, AppUserRepository>();
+#endregion
+#region "Order"
+builder.Services.AddScoped<IOrderAppService, OrderAppService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+#endregion
+#region "OrderStatus"
+builder.Services.AddScoped<IOrderStatusAppService, OrderStatusAppService>();
+builder.Services.AddScoped<IOrderStatusService, OrderStatusService>();
+builder.Services.AddScoped<IOrderStatusRepository, OrderStatusRepository>();
+#endregion
+#region "Service"
+builder.Services.AddScoped<IServiceAppService, ServiceAppService>();
+builder.Services.AddScoped<IServiceService, ServiceService>();
+builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
+#endregion
+#region "Category"
+builder.Services.AddScoped<ICategoryAppService, CategoryAppService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+#endregion
+#region "Bid"
+builder.Services.AddScoped<IBidAppService, BidAppService>();
+builder.Services.AddScoped<IBidService, BidService>();
+builder.Services.AddScoped<IBidRepository, BidRepository>();
+#endregion
+#region "ServiceComment"
+builder.Services.AddScoped<IServiceCommentAppService, ServiceCommentAppService>();
+builder.Services.AddScoped<IServiceCommentService, ServiceCommentService>();
+builder.Services.AddScoped<IServiceCommentRepository, ServiceCommentRepository>();
+#endregion
 
 var app = builder.Build();
 

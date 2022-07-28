@@ -12,7 +12,7 @@
         <form asp-controller="UserManagment" asp-action="Index">
             <p>
                 <label for="search">Search: </label>
-                <input type="text" name="SearchStrin" id="search" />
+                <input type="text" name="search" id="search" />
                 <input type="submit" value="جستجو" />
             </p>
         </form>
@@ -20,10 +20,11 @@
 </div>
 <a asp-area="Admin" asp-controller="UserManagment" asp-action="Create" class="btn btn-success text-end">ایجاد کاربر</a>
 
-<table class="table">
+<table class="table table-striped">
     <thead>
         <tr>
             <th>شناسه</th>
+            <th>نام و نام خانوادگی</th>
             <th>نام کاربری</th>
             <th>ایمیل</th>
             <th>نقش</th>
@@ -35,6 +36,7 @@
         {
             <tr>
                 <th>@user.Id</th>
+                <th>@user.Name</th>
                 <td>@user.UserName</td>
                 <td>@user.Email</td>
                 <td>

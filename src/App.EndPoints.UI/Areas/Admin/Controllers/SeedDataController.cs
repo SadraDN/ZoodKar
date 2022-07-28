@@ -1,4 +1,5 @@
 ﻿
+using App.Domain.Core.HomeService.Dtos;
 using App.Domain.Core.User.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -21,6 +22,11 @@ namespace App.EndPoints.UI.Areas.Admin.Controllers
             var adminCroleCreation = await _roleManager.CreateAsync(new IdentityRole<int>("AdminRole"));
             var customerCroleCreation = await _roleManager.CreateAsync(new IdentityRole<int>("CustomerRole"));
             var expertCroleCreation = await _roleManager.CreateAsync(new IdentityRole<int>("ExpertRole"));
+            var status = new OrderStatusDto()
+            {
+                Id = 1,
+                Title = "در انتظار پیشنهاد متخصصان"
+            };
             return View();
         }
     }

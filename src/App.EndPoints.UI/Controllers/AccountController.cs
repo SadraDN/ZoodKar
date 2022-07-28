@@ -1,41 +1,46 @@
-﻿using App.Domain.Core.User.Entities;
-using App.EndPoints.UI.Models;
+﻿using App.Domain.Core.User.Contracts.AppServices;
+using App.Domain.Core.User.Dtos;
+using App.EndPoints.UI.Models.Account;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace App.EndPoints.UI.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly UserManager<AppUser> _userManager;
-        private readonly SignInManager<AppUser> _signInManager;
-
-        public AccountController(
-            UserManager<AppUser> userManager,
-            SignInManager<AppUser> signInManager)
+        private readonly IAppUserAppService _appUserAppService;
+        private readonly IHttpContextAccessor _httpContext;
+        public AccountController(IAppUserAppService AppUserAppService,
+            IHttpContextAccessor httpContext)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
+            _appUserAppService = AppUserAppService;
+            _httpContext = httpContext;
         }
 
         [AllowAnonymous]
-        public async Task<IActionResult> Login()
+        public async Task<IActionResult> Login(string returnurl)
         {
-            await _signInManager.SignOutAsync();
+            ViewBag.ReturnUrl = returnurl;
+            await _appUserAppService.SignOutUser();
             return View();
         }
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Login(LoginViewModel model)
+        public async Task<IActionResult> Login(LoginViewModel model,string? ReturnUrl)
         {
+            
             if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, false);
+                var user = new AppUserDto()
+                {
+                    Password = model.Password,
+                    UserName = model.UserName,
+                };
+                var result = await _appUserAppService.Login(user, model.RememberMe);
                 if (result.Succeeded)
                 {
-                    return LocalRedirect("~/");
+                    return LocalRedirect(ReturnUrl);
                 }
 
                 ModelState.AddModelError(string.Empty, "خطا در فرآیند لاگین");
@@ -46,7 +51,7 @@ namespace App.EndPoints.UI.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Logout()
         {
-            await _signInManager.SignOutAsync();
+            await _appUserAppService.SignOutUser();
             return LocalRedirect("~/");
         }
 
@@ -62,18 +67,19 @@ namespace App.EndPoints.UI.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new AppUser
+                var user = new AppUserDto
                 {
+                    Password = model.Password,
                     Name = model.Name,
                     UserName = model.UserName,
-                    Email = model.Email
+                    Email = model.Email,
                 };
 
-                var result = await _userManager.CreateAsync(user, model.Password);
+                var result = await _appUserAppService.Create(user);
                 if (result.Succeeded)
                 {
-                    //await _userManager.AddToRoleAsync(user, "CustomerRole");
-                    await _signInManager.SignInAsync(user, isPersistent: false);
+
+                    await _appUserAppService.Login(user, rememberMe: true);
                     return LocalRedirect("~/");
                 }
                 else

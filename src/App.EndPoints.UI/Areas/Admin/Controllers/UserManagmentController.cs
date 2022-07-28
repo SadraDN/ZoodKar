@@ -1,4 +1,6 @@
-﻿using App.Domain.Core.User.Entities;
+﻿using App.Domain.Core.User.Contracts.AppServices;
+using App.Domain.Core.User.Dtos;
+using App.Domain.Core.User.Entities;
 using App.EndPoints.UI.Areas.Admin.Models.ViewModels.UserManagment;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -7,10 +9,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace App.EndPoints.UI.Areas.Admin.Controllers
 {
-
+    
     [Area("Admin")]
-        public class UserManagmentController : Controller
-        {
+    public class UserManagmentController : Controller
+    {
+        private readonly IAppUserAppService _appUserAppService;
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<IdentityRole<int>> _roleManager;
         private readonly SignInManager<AppUser> _signInManager;
@@ -19,40 +22,38 @@ namespace App.EndPoints.UI.Areas.Admin.Controllers
         public UserManagmentController(UserManager<AppUser> userManager,
             RoleManager<IdentityRole<int>> roleManager,
             SignInManager<AppUser> signInManager,
-            IPasswordHasher<AppUser> passwordHasher)
+            IPasswordHasher<AppUser> passwordHasher
+            , IAppUserAppService AppUserAppService)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _signInManager = signInManager;
             _passwordHasher = passwordHasher;
+            _appUserAppService = AppUserAppService;
         }
 
-        public async Task<IActionResult> Index(string? SearchStrin)
+        public async Task<IActionResult> Index(string? search)
         {
-            var users = await _userManager.Users.ToListAsync();
+            var users = await _appUserAppService.GetAll(search);
             var model = users.Select(x => new UserOutputVM
             {
                 Id = x.Id,
+                Name = x.Name,
                 UserName = x.UserName,
                 Email = x.Email,
-                Roles = (_userManager.GetRolesAsync(x).Result).ToList()
+                Roles = x.Roles.ToList()
             }).ToList();
-            if (!string.IsNullOrEmpty(SearchStrin))
-            {
-                model = model.Where(s => s.UserName.ToLower()!.Contains(SearchStrin.ToLower())).ToList();
-            }
-
-
             return View(model);
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewBag.Roles = _roleManager.Roles.Select(x => new SelectListItem()
+            var roles = await _appUserAppService.GetRoles();
+            ViewBag.Roles = roles.Select(x => new SelectListItem()
             {
                 Text = x.Name,
-                Value = x.Name
+                Value = x.Name,
             });
             return View();
         }
@@ -62,26 +63,22 @@ namespace App.EndPoints.UI.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new AppUser
+                var user = new AppUserDto
                 {
                     UserName = model.UserName,
-                    Email = model.Email
+                    Email = model.Email,
+                    Password = model.Password,
+                    Roles = model.Roles
                 };
 
-                var result = await _userManager.CreateAsync(user, model.Password);
-
+                var result = await _appUserAppService.Create(user);
 
                 if (result.Succeeded)
                 {
-                    
-                    foreach (var role in model.Roles)
-                    {
-                        await _userManager.AddToRoleAsync(user, role);
-                    }
 
-                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    await _appUserAppService.Login(user,true);
 
-                    return LocalRedirect("~/");
+                    return LocalRedirect("~/Admin/Dashboard");
                 }
                 else
                 {
@@ -98,80 +95,43 @@ namespace App.EndPoints.UI.Areas.Admin.Controllers
         public async Task<IActionResult> Edit(int id)
         {
 
-            var user = await _userManager.FindByIdAsync(id.ToString());
-            var roles = (_userManager.GetRolesAsync(user).Result).ToList();
-            var _roles = _roleManager.Roles.Where(t => !roles.Contains(t.Name)).Select(x => new SelectListItem()
-            {
-                Text = x.Name,
-                Value = x.Name
-            }).ToList();
-
-            ViewBag.Roles = _roles;
+            var roles = await _appUserAppService.GetRoles();
+            var user = await _appUserAppService.Get(id);
+            ViewBag.Roles = roles.Where(t => !user.Roles.Contains(t.Name)).Select(x => new SelectListItem()
+            { Value = x.Name, Text = x.Name }).ToList();
             if (user != null)
             {
-                UserUpdateVM model = new UserUpdateVM();
-                model.UserName = user.UserName;
-                model.Email = user.Email;
-                model.Id = user.Id;
-                model.Roles = (_userManager.GetRolesAsync(user).Result).ToList();
+                UserUpdateVM model = new()
+                {
+                    Name = user.Name,
+                    UserName = user.UserName,
+                    Email = user.Email,
+                    Id = user.Id,
+                    Roles = user.Roles.ToList(),
+                    Password = user.Password,
+                };
                 return View(model);
             }
             else
                 return RedirectToAction("Index");
         }
 
+
         [HttpPost]
         public async Task<IActionResult> Edit(UserUpdateVM model)
         {
-            var user = await _userManager.FindByIdAsync(model.Id.ToString());
-            if (user != null)
+            var user = new AppUserDto
             {
-                if (!string.IsNullOrEmpty(model.UserName))
-                    user.UserName = model.UserName;
-                else
-                    ModelState.AddModelError("", "UserName cannot be empty");
-                if (!string.IsNullOrEmpty(model.Email))
-                    user.Email = model.Email;
-                else
-                    ModelState.AddModelError("", "Email cannot be empty");
+                Id = model.Id,
+                UserName = model.UserName,
+                Name = model.Name,
+                Password = model.Password,
+                Email = model.Email,
+                Roles = model.Roles,
+            };
+            await _appUserAppService.Update(user);
 
-                if (!string.IsNullOrEmpty(model.Password))
-                    user.PasswordHash = _passwordHasher.HashPassword(user, model.Password);
-                else
-                    ModelState.AddModelError("", "Password cannot be empty");
-
-                var rol = await _userManager.GetRolesAsync(user);
-                foreach (var item in rol)
-                {
-                    if (model.Roles.Exists(x => x != item))
-                    {
-                        await _userManager.RemoveFromRoleAsync(user, item);
-                    }
-                }
-
-                foreach (var role in model.Roles)
-                {
-                    if (!string.IsNullOrEmpty(role))
-                    {
-                        await _userManager.AddToRoleAsync(user, role);
-                    }
-                }
-
-                if (!string.IsNullOrEmpty(model.Email) || !string.IsNullOrEmpty(model.Password))
-                {
-                    IdentityResult result = await _userManager.UpdateAsync(user);
-                    if (result.Succeeded)
-                        return RedirectToAction("Index");
-                    else
-                        foreach (var item in result.Errors)
-                        {
-                            ModelState.AddModelError(string.Empty, item.Description);
-                        }
-                }
-            }
-            else
-                ModelState.AddModelError("", "User Not Found");
-            return View(model);
+            return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> Delete(string id)
@@ -182,3 +142,4 @@ namespace App.EndPoints.UI.Areas.Admin.Controllers
         }
     }
 }
+

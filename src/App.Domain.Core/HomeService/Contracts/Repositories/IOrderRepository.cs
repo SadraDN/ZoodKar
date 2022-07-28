@@ -15,6 +15,7 @@ namespace App.Domain.Core.HomeService.Contracts.Repositories
         Task<List<OrderDto>> GetAllByCustomerId(int customerId, CancellationToken cancellationToken);
         Task<List<OrderDto>> GetAllByExpertId(int expertId, CancellationToken cancellationToken);
         Task<OrderDto>? GetByOrderId(int orderId, CancellationToken cancellationToken);
+        
 
 
         #endregion

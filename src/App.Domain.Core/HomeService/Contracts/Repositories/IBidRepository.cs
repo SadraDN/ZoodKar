@@ -2,13 +2,14 @@
 
 namespace App.Domain.Core.HomeService.Contracts.Repositories
 {
-    public interface IBidsRepository
+    public interface IBidRepository
     {
         #region "Queries"
 
         Task<List<BidDto>> GetAll(CancellationToken cancellationToken);
         Task<List<BidDto>> GetAllByExpertId(int expertId, CancellationToken cancellationToken);
         Task<List<BidDto>> GetAllByOrderId(int orderId, CancellationToken cancellationToken);
+        Task<BidDto>? GetById(int id,CancellationToken cancellationToken);
 
         #endregion
 

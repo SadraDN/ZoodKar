@@ -1,0 +1,52 @@
+﻿@using App.Domain.Core.HomeService.Dtos
+@model List<BidDto>
+<h3>لیست پشنهادات درخواست</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>شناسه</th>
+            <th>شماره سفارش</th>
+            <th>تاریخ ساخت</th>
+            <th>نام متخصص</th>
+            <th>قیمت پیشنهادی</th>
+            <th>وضعیت سفارش</th>
+            <th>اعمالات</th>
+
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var bid in Model)
+        {
+            @if (bid.IsApproved == false)
+            {
+                <tr>
+                    <td>@bid.Id</td>
+                    <td>@bid.OrderId</td>
+                    <td>@bid.CreatedAt</td>
+                    <td>@bid.ExpertName</td>
+                    <td>@bid.SuggestedPrice</td>
+                    <td>@bid.IsApproved</td>
+                    <td>
+                        <a asp-controller="Order" asp-action="Approve" asp-route-orderId="@bid.OrderId" asp-route-bidId="@bid.Id" class="btn btn-info">تایید پیشنهاد</a>
+                    </td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td>@bid.Id</td>
+                    <td>@bid.OrderId</td>
+                    <td>@bid.CreatedAt</td>
+                    <td>@bid.ExpertName</td>
+                    <td>@bid.SuggestedPrice</td>
+                    <td>@bid.IsApproved</td>
+                    <td>
+                        پیشنهاد تایید شده
+                    </td>
+                </tr>
+
+            }
+        }
+    </tbody>
+</table>

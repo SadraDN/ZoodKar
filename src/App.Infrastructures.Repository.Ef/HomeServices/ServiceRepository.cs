@@ -27,6 +27,7 @@ namespace App.Infrastructures.Repository.Ef.HomeServices
                 Title = dto.Title,
                 ShortDescription = dto.ShortDescription,
                 Price = dto.Price,
+                
             };
             await _context.AddAsync(record, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
@@ -85,6 +86,7 @@ namespace App.Infrastructures.Repository.Ef.HomeServices
                 Title = p.Title,
                 ShortDescription = p.ShortDescription,
                 Price = p.Price,
+                CategoryName = p.Category.Title
             
             }).ToListAsync(cancellationToken);
         }

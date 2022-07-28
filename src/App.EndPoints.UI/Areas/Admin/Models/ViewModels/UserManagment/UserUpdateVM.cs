@@ -13,6 +13,10 @@ namespace App.EndPoints.UI.Areas.Admin.Models.ViewModels.UserManagment
         public string UserName { set; get; }
 
         [Required(ErrorMessage = "این فیلد الزامی است")]
+        [Display(Name = "نام و نام خانوادگی")]
+        public string Name { set; get; }
+
+        [Required(ErrorMessage = "این فیلد الزامی است")]
         [EmailAddress]
         [Display(Name = "ایمیل")]
         public string Email { set; get; }

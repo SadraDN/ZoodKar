@@ -3,20 +3,19 @@ using App.Domain.Core.HomeService.Dtos;
 using App.Domain.Core.HomeService.Entities;
 using App.Infrastructures.Database.SqlServer;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace App.Infrastructures.Repository.Ef.HomeServices
 {
     public class OrderRepository : IOrderRepository
     {
         private readonly AppDbContext _context;
-        public OrderRepository(AppDbContext context)
+        private readonly ILogger<OrderRepository> _logger;
+        public OrderRepository(AppDbContext context,
+            ILogger<OrderRepository> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public async Task Add(OrderDto dto, CancellationToken cancellationToken)
@@ -29,46 +28,45 @@ namespace App.Infrastructures.Repository.Ef.HomeServices
                 CustomerUserId = dto.CustomerUserId,
                 FinalExpertUserId = dto.FinalExpertUserId,
                 CreatedAt = dto.CreatedAt,
+                SerivceAddress = dto.SerivceAddress,
             };
+
             await _context.AddAsync(record, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
-            foreach (var file in dto.AppFiles)
-            {
-                OrderFile orderFiles = new OrderFile
-                {
-                    OrderId = record.Id,
-                    FileId = file.Id,
-                    CreatedUserId = file.CreatedUserId,
-                    CreatedAt = DateTime.Now,
-                };
-                record.OrderFiles.Add(orderFiles);
-            }
+            //foreach (var file in dto.AppFiles)
+            //{
+            //    OrderFile orderFiles = new OrderFile
+            //    {
+            //        OrderId = record.Id,
+            //        FileId = file.Id,
+            //        CreatedUserId = file.CreatedUserId,
+            //        CreatedAt = DateTime.Now,
+            //    };
+            //    record.OrderFiles.Add(orderFiles);
+            //}
             await _context.SaveChangesAsync(cancellationToken);
         }
 
         public async Task Update(OrderDto dto, CancellationToken cancellationToken)
         {
             var record = await _context.Orders.Where(p => p.Id == dto.Id).Include(x => x.OrderFiles).SingleAsync(cancellationToken);
-            record.ServiceId = dto.ServiceId;
             record.StatusId = dto.StatusId;
             record.ServiceBasePrice = dto.ServiceBasePrice;
-            record.CustomerUserId = dto.CustomerUserId;
-            record.FinalExpertUserId = dto.FinalExpertUserId;
 
-            var orderFiles = new List<OrderFile>();
-            foreach (var file in dto.AppFiles)
-            {
-                OrderFile orderFile = new OrderFile
-                {
-                    OrderId = record.Id,
-                    FileId = file.Id,
-                    CreatedUserId = file.CreatedUserId,
-                    CreatedAt = DateTime.Now,
-                };
-                orderFiles.Add(orderFile);
-            }
+            //var orderFiles = new List<OrderFile>();
+            //foreach (var file in dto.AppFiles)
+            //{
+            //    OrderFile orderFile = new OrderFile
+            //    {
+            //        OrderId = record.Id,
+            //        FileId = file.Id,
+            //        CreatedUserId = file.CreatedUserId,
+            //        CreatedAt = DateTime.Now,
+            //    };
+            //    orderFiles.Add(orderFile);
+            //}
 
-            record.OrderFiles = orderFiles;
+            //record.OrderFiles = orderFiles;
             await _context.SaveChangesAsync(cancellationToken);
         }
 
@@ -81,16 +79,29 @@ namespace App.Infrastructures.Repository.Ef.HomeServices
 
         public async Task<List<OrderDto>> GetAll(CancellationToken cancellationToken)
         {
-            return await _context.Orders.Select(p => new OrderDto()
+            _logger.LogInformation("admin call {methodname} method", "GetAll");
+            _logger.LogTrace("start trace method : {methodname}", "GetAll");
+           var orders = await _context.Orders.Select(p => new OrderDto()
             {
                 Id = p.Id,
                 ServiceId = p.ServiceId,
+                ServiceName = p.Service.Title,
                 StatusId = p.StatusId,
+                StatusName= p.Status.Title,
                 CustomerUserId = p.CustomerUserId,
+                CustomerUserName = p.Customer.Name,
                 FinalExpertUserId = p.FinalExpertUserId,
-                ServiceBasePrice = p.ServiceBasePrice,
+                FinalExpertUserName= p.Expert.Name,
+                ServiceBasePrice = p.Service.Price,
                 CreatedAt = p.CreatedAt,
+                SerivceAddress = p.SerivceAddress,
             }).ToListAsync(cancellationToken);
+            if (orders == null)
+            {
+                _logger.LogWarning("no record availble in {methodname}", "GetAll");
+            }
+            _logger.LogTrace("start trace method : {methodname}", "GetAll");
+            return orders;
         }
 
         public async Task<List<OrderDto>> GetAllByCustomerId(int customerId, CancellationToken cancellationToken)
@@ -104,6 +115,7 @@ namespace App.Infrastructures.Repository.Ef.HomeServices
                 FinalExpertUserId = p.FinalExpertUserId,
                 ServiceBasePrice = p.ServiceBasePrice,
                 CreatedAt = p.CreatedAt,
+                SerivceAddress = p.SerivceAddress,
             }).ToListAsync(cancellationToken);
         }
 
@@ -118,6 +130,7 @@ namespace App.Infrastructures.Repository.Ef.HomeServices
                 FinalExpertUserId = p.FinalExpertUserId,
                 ServiceBasePrice = p.ServiceBasePrice,
                 CreatedAt = p.CreatedAt,
+                SerivceAddress= p.SerivceAddress,
             }).ToListAsync(cancellationToken);
         }
 
@@ -131,7 +144,8 @@ namespace App.Infrastructures.Repository.Ef.HomeServices
                 CustomerUserId = p.CustomerUserId,
                 FinalExpertUserId = p.FinalExpertUserId,
                 ServiceBasePrice = p.ServiceBasePrice,
-                CreatedAt = p.CreatedAt
+                CreatedAt = p.CreatedAt,
+                SerivceAddress = p.SerivceAddress,
             }).SingleOrDefaultAsync(cancellationToken);
             return record;
         }
