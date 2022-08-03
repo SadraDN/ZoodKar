@@ -6,10 +6,11 @@ using App.EndPoints.UI.Models.Order;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace App.EndPoints.UI.Controllers
 {
-    
+
     public class OrderController : Controller
     {
         private readonly IOrderAppService _orderAppService;
@@ -17,20 +18,20 @@ namespace App.EndPoints.UI.Controllers
         private readonly ICategoryAppService _categoryAppService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IAppUserAppService _appUserAppService;
-        private readonly UserManager<AppUser> _userManager;
+        private readonly IBidAppService _bidAppService;
         public OrderController(IOrderAppService OrderAppService
             , IServiceAppService ServiceAppService
              , ICategoryAppService CategoryAppService
             , IHttpContextAccessor HttpContextAccessor
-            , UserManager<AppUser> UserManager
-            , IAppUserAppService AppUserAppService)
+            , IAppUserAppService AppUserAppService
+            , IBidAppService BidAppService)
         {
             _orderAppService = OrderAppService;
             _serviceAppService = ServiceAppService;
             _categoryAppService = CategoryAppService;
             _httpContextAccessor = HttpContextAccessor;
-            _userManager = UserManager;
             _appUserAppService = AppUserAppService;
+            _bidAppService = BidAppService;
         }
         public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
@@ -44,10 +45,10 @@ namespace App.EndPoints.UI.Controllers
         }
 
 
-        public async Task<IActionResult> ServiceList(int categoryId,CancellationToken cancellationToken)
+        public async Task<IActionResult> ServiceList(int categoryId, CancellationToken cancellationToken)
         {
             var record = await _serviceAppService.GetAll(cancellationToken);
-            var services = record.Where(c=>c.CategoryId==categoryId).Select(c => new ServiceVM
+            var services = record.Where(c => c.CategoryId == categoryId).Select(c => new ServiceVM
             {
                 CategoryName = c.CategoryName,
                 Title = c.Title,
@@ -59,32 +60,61 @@ namespace App.EndPoints.UI.Controllers
             return View(services);
         }
 
-        [Authorize(Roles ="CustomerRole")]
+        [Authorize(Roles = "CustomerRole")]
         [HttpGet]
-        public async Task<IActionResult> Create(int serviceId,CancellationToken cancellationToken)
+        public IActionResult Create(int serviceId, CancellationToken cancellationToken)
         {
             ViewBag.ServiceId = Convert.ToInt32(serviceId);
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(OrderInputVM model,int id,CancellationToken cancellationToken)
+        public async Task<IActionResult> Create(OrderInputVM model, IList<IFormFile>? orderFile, int id, CancellationToken cancellationToken)
         {
             var userId = await _appUserAppService.GetLoggedUserId();
             if (ModelState.IsValid)
             {
                 var order = new OrderDto
                 {
-                    ServiceDate = model.ServiceTime,
+                    ServiceDate = model.ServiceDate,
                     SerivceAddress = model.Address,
                     ServiceId = id,
                     CustomerUserId = userId,
                 };
-                await _orderAppService.Set(order, cancellationToken);
+                await _orderAppService.Set(order, orderFile, cancellationToken);
                 return RedirectToAction("Index");
             }
             return View(model);
-            
+
+        }
+
+        [Authorize(Roles = "CustomerRole")]
+        public async Task<IActionResult> OrdersList(CancellationToken cancellationToken)
+        {
+            var customerId = await _appUserAppService.GetLoggedUserId();
+            var orders = await _orderAppService.GetAllByCustomerId(customerId, cancellationToken);
+            return View(orders);
+        }
+
+        [Authorize(Roles = "CustomerRole")]
+        public async Task<IActionResult> BidsList(int orderId, CancellationToken cancellationToken)
+        {
+            var bids = await _bidAppService.GetAllByOrderId(orderId, cancellationToken);
+            return View(bids);
+        }
+
+        [Authorize(Roles = "CustomerRole")]
+        public async Task<IActionResult> Approve(int expertUserId, int orderId, int bidId, CancellationToken cancellationToken)
+        {
+            await _bidAppService.Approve(expertUserId, orderId, bidId, cancellationToken);
+            return RedirectToAction($"Index");
+        }
+
+        [Authorize(Roles = "ExpertRole")]
+        public async Task<IActionResult> ExpertOrders(CancellationToken cancellationToken)
+        {
+            var expertId = await _appUserAppService.GetLoggedUserId();
+            return View();
         }
     }
 }

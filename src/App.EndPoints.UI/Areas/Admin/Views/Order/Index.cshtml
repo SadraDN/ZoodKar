@@ -31,17 +31,29 @@
                 <td>@order.SerivceAddress</td>
                 <td>@order.ServiceDate</td>
                 <td>
-                    @if (order.FinalExpertUserId == null)
+                    @*@if (order.FinalExpertUserId == null)
+                        {
+                        <span>	منتظر پیشنهاد متخصصان</span>
+                        }*@
+                    @*else*@
                     {
-                         <span>	منتظر پیشنهاد متخصصان</span>
-                    }
-                    else
-                    {
-                        @order.StatusName
+                    @order.StatusName
                     }
                 </td>
                 <td>
-                    <a asp-controller="Order" asp-action="BidsList" asp-route-orderId="@order.Id" class="btn btn-info">نمایش پیشنهادات</a>
+                    @if (order.AppFiles.Count>0)
+                    {
+                        <img src="~/img/order/@order.AppFiles.FirstOrDefault().FileAddress" width="200px">
+                    }
+                    else
+                    {
+                        <img src="~/img/photos/ServicePic.jpeg" width="200px" />
+                    }
+
+                </td>
+                <td>
+                    <a asp-controller="Order" asp-action="BidsList" asp-route-orderId="@order.Id" asp-route-expertUserId="@order.FinalExpertUserId" class="btn btn-info">نمایش پیشنهادات</a>
+                    <a asp-controller="Order" asp-action="Detail" asp-route-orderId="@order.Id"  class="btn btn-info">جزئیات</a>
                     <a asp-controller="Order" asp-action="Edit" asp-route-id="@order.Id" class="btn btn-warning">ویرایش</a>
                     <a asp-controller="Order" asp-action="Delete" asp-route-id="@order.Id" class="btn btn-danger">حذف</a>
                 </td>

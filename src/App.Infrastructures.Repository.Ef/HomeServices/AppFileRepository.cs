@@ -18,7 +18,7 @@ namespace App.Infrastructures.Repository.Ef.HomeServices
         {
             _context = Context;
         }
-        public async Task Add(AppFileDto dto, CancellationToken cancellationToken)
+        public async Task<int> Add(AppFileDto dto, CancellationToken cancellationToken)
         {
             AppFile record = new()
             {
@@ -29,6 +29,7 @@ namespace App.Infrastructures.Repository.Ef.HomeServices
             };
             await _context.AddAsync(record, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
+            return record.Id;
         }
 
         public async Task Update(AppFileDto dto, CancellationToken cancellationToken)

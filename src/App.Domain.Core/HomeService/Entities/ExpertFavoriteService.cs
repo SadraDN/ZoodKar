@@ -4,15 +4,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace App.Domain.Core.HomeService.Entities
 {
-    public partial class ExpertFavoriteCategory
+    public partial class ExpertFavoriteService
     {
         public int Id { get; set; }
         [ForeignKey("AppUser")]
         public int ExpertUserId { get; set; }
-        public int CategoryId { get; set; }
+        public int ServiceId { get; set; }
         public DateTime CreatedAt { get; set; }
 
-        public virtual Category Category { get; set; } = null!;
+        public virtual Service Service { get; set; } = null!;
         public virtual AppUser AppUser { get; set; } = null!;
     }
 }

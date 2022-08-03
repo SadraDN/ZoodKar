@@ -19,7 +19,7 @@ namespace App.Domain.Services.HomeServices
             _orderRepository = orderRepository;
         }
 
-        public async Task Approve(int orderId,int bidId, CancellationToken cancellationToken)
+        public async Task Approve(int expertFinalId, int orderId,int bidId, CancellationToken cancellationToken)
         {
             var bids = await _bidRepository.GetAllByOrderId(orderId,cancellationToken);
             foreach (var bid in bids)
@@ -31,6 +31,7 @@ namespace App.Domain.Services.HomeServices
             recordBid.IsApproved = true;
             var recordOrder= await _orderRepository.GetByOrderId(orderId, cancellationToken);
             recordOrder.StatusId = 3;
+            recordOrder.FinalExpertUserId = expertFinalId;
             await _bidRepository.Update(recordBid, cancellationToken);
             await _orderRepository.Update(recordOrder, cancellationToken);
 

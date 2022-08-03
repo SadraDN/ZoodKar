@@ -46,9 +46,9 @@ namespace App.Domain.Services.HomeServices
             return await _appFileRepository.GetAll(cancellationToken);
         }
 
-        public async Task Set(AppFileDto dto, CancellationToken cancellationToken)
+        public async Task<int> Set(AppFileDto dto, CancellationToken cancellationToken)
         {
-            await _appFileRepository.Add(dto, cancellationToken);
+           return await _appFileRepository.Add(dto, cancellationToken);
         }
 
         public async Task Update(AppFileDto dto, CancellationToken cancellationToken)

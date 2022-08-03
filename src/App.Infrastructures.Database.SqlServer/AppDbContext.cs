@@ -23,7 +23,7 @@ namespace App.Infrastructures.Database.SqlServer
         public virtual DbSet<Bid> Bids { get; set; } = null!;
         public virtual DbSet<Category> Categories { get; set; } = null!;
         public virtual DbSet<Entity> Entities { get; set; } = null!;
-        public virtual DbSet<ExpertFavoriteCategory> ExpertFavoriteCategories { get; set; } = null!;
+        public virtual DbSet<ExpertFavoriteService> ExpertFavoriteCategories { get; set; } = null!;
         public virtual DbSet<AppFile> Files { get; set; } = null!;
         public virtual DbSet<Order> Orders { get; set; } = null!;
         public virtual DbSet<OrderFile> OrderFiles { get; set; } = null!;
@@ -58,13 +58,13 @@ namespace App.Infrastructures.Database.SqlServer
                 entity.Property(e => e.Title).HasMaxLength(250);
             });
 
-            modelBuilder.Entity<ExpertFavoriteCategory>(entity =>
+            modelBuilder.Entity<ExpertFavoriteService>(entity =>
             {
                 entity.Property(e => e.CreatedAt).HasPrecision(0);
 
-                entity.HasOne(d => d.Category)
-                    .WithMany(p => p.ExpertFavoriteCategories)
-                    .HasForeignKey(d => d.CategoryId)
+                entity.HasOne(d => d.Service)
+                    .WithMany(p => p.ExpertFavoriteServices)
+                    .HasForeignKey(d => d.ServiceId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ExpertFavoriteCategories_Categories");
             });

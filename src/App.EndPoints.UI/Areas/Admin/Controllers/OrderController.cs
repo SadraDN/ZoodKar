@@ -16,7 +16,7 @@ namespace App.EndPoints.UI.Areas.Admin.Controllers
         public OrderController(IOrderAppService OrderAppService,
             IOrderStatusAppService OrderStatusAppService
             , IBidAppService BidAppService
-            ,ILogger<OrderController> logger)
+            , ILogger<OrderController> logger)
         {
             _orderAppService = OrderAppService;
             _orderStatusAppService = OrderStatusAppService;
@@ -33,7 +33,7 @@ namespace App.EndPoints.UI.Areas.Admin.Controllers
                 Text = s.Title,
                 Value = s.Id.ToString()
             });
-            if(result.Count == 0)
+            if (result.Count == 0)
             {
                 _logger.LogWarning("No Order available");
             }
@@ -46,9 +46,9 @@ namespace App.EndPoints.UI.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Edit(int id,CancellationToken cancellationToken)
+        public async Task<IActionResult> Edit(int id, CancellationToken cancellationToken)
         {
-            var statues= await _orderStatusAppService.GetAll(cancellationToken);
+            var statues = await _orderStatusAppService.GetAll(cancellationToken);
             ViewBag.Statuses = statues.Select(s => new SelectListItem
             {
                 Text = s.Title,
@@ -61,12 +61,12 @@ namespace App.EndPoints.UI.Areas.Admin.Controllers
                 StatusId = order.StatusId,
                 Id = order.Id,
             };
-            
+
             return View(dto);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(OrderUpdateVM model , CancellationToken cancellationToken)
+        public async Task<IActionResult> Edit(OrderUpdateVM model, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
@@ -81,26 +81,32 @@ namespace App.EndPoints.UI.Areas.Admin.Controllers
             var statues = await _orderStatusAppService.GetAll(cancellationToken);
             await _orderAppService.Update(dto, cancellationToken);
             return RedirectToAction("Index");
-        }      
+        }
 
-        public async Task<IActionResult> BidsList(int orderId,CancellationToken cancellationToken)
+        public async Task<IActionResult> BidsList(int orderId, CancellationToken cancellationToken)
         {
-           var bids= await _bidAppService.GetAllByOrderId(orderId,cancellationToken);
+            //var bids = await _bidAppService.GetAllByOrderId(orderId, cancellationToken);
+            var bids = await _orderAppService.GetAllByOrderId(orderId, cancellationToken);
             return View(bids);
         }
 
-        public async Task<IActionResult> Approve(int orderId, int bidId,CancellationToken cancellationToken)
+        public async Task<IActionResult> Approve(int expertUserId, int orderId, int bidId, CancellationToken cancellationToken)
         {
-           await _bidAppService.Approve(orderId,bidId,cancellationToken);
+            await _bidAppService.Approve(expertUserId, orderId, bidId, cancellationToken);
             return RedirectToAction($"Index");
         }
 
-        public async Task<IActionResult> Delete(int id,CancellationToken cancellationToken)
+        public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
         {
-           await _orderAppService.Delete(id,cancellationToken);
+            await _orderAppService.Delete(id, cancellationToken);
             return RedirectToAction("Index");
+        }
+        public async Task<IActionResult> Detail(int orderId, CancellationToken cancellationToken)
+        {
+            var order = await _orderAppService.GetByOrderId(orderId, cancellationToken);
+            return View(order);
         }
     }
 
-    
+
 }

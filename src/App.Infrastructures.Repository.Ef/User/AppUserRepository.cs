@@ -1,4 +1,5 @@
-﻿using App.Domain.Core.User.Contracts.Repositories;
+﻿using App.Domain.Core.HomeService.Dtos;
+using App.Domain.Core.User.Contracts.Repositories;
 using App.Domain.Core.User.Dtos;
 using App.Domain.Core.User.Entities;
 using App.Infrastructures.Database.SqlServer;
@@ -75,6 +76,15 @@ namespace App.Infrastructures.Repository.Ef.User
                 HomeAddress = user.HomeAddress,
                 IsActive = user.IsActive,
                 PictureFileId = user.PictureFileId,
+                ExpertFavoriteCategories = user.ExpertFavoriteCategories.Select(x => new ExpertFavoriteServiceDto
+                {
+                    ServiceId = x.ServiceId,
+                    ServiceTitle = x.Service.Title,
+                    CreatedAt = x.CreatedAt,
+                    ExpertName = x.AppUser.Name,
+                    ExpertUserId = x.AppUser.Id,
+                    Id = x.Id,
+                }).ToList(),
             };
             var roles = await _userManager.GetRolesAsync(user);
             appUserDto.Roles = roles;
@@ -97,6 +107,15 @@ namespace App.Infrastructures.Repository.Ef.User
                 IsActive = p.IsActive,
                 PictureFileId = p.PictureFileId,
                 UserName = p.UserName,
+                ExpertFavoriteCategories = p.ExpertFavoriteCategories.Select(x=>new ExpertFavoriteServiceDto
+                {
+                    ServiceId = x.ServiceId,
+                    ServiceTitle = x.Service.Title,
+                    CreatedAt = x.CreatedAt,
+                    ExpertName =x.AppUser.Name,
+                    ExpertUserId = x.AppUser.Id,
+                    Id = x.Id,  
+                }).ToList(),
             }).ToListAsync();
             foreach (var item in users)
             {

@@ -1,0 +1,66 @@
+﻿@using App.Domain.Core.HomeService.Dtos
+@model OrderDto
+@{
+    ViewData["Title"] = "جزئیات";
+}
+<div class="row">
+    <div class="col-6">
+        <h3>جزئیات سفارش</h3>
+    </div>
+    <div class="col-6 text-start">
+        <a asp-controller="Order" asp-action="OrderComment" asp-route-orderId=@Model.Id class="btn btn-success">ثبت نظر</a>
+    </div>
+</div>
+<div>
+    <table class="table table-bordered">
+        <tr>
+            <td>ساعت ایجاد</td>
+            <td>@Model.CreatedAt</td>
+        </tr>
+        <tr>
+            <td>نوع سرویس</td>
+            <td>@Model.ServiceName</td>
+        </tr>
+        <tr>
+            <td>قیمت پایه</td>
+            <td>@Model.ServiceBasePrice</td>
+        </tr>
+        <tr>
+            <td>آدرس</td>
+            <td>@Model.SerivceAddress</td>
+        </tr>
+        <tr>
+            <td>ساعت انجام</td>
+            <td>@Model.ServiceDate</td>
+        </tr>
+        <tr>
+            <td>نام مشتری</td>
+            <td>@Model.CustomerUserName</td>
+        </tr>
+        <tr>
+            <td>نام متخصص</td>
+            <td>@Model.FinalExpertUserName</td>
+        </tr>
+        <tr>
+            <td>وضعیت سفارش</td>
+            <td>@Model.StatusName</td>
+        </tr>
+    </table>
+    <div class="border row">
+        @if (@Model.AppFiles.Count > 0)
+        {
+            @foreach (var image in @Model.AppFiles)
+            {
+                <div class="col-4">
+                    <img src="~/img/Order/@image.FileAddress" width="300px" />
+                </div>
+            }
+        }
+        else
+        {
+            <h6>عکس ندارد</h6>
+        }
+
+
+    </div>
+</div>

@@ -13,7 +13,7 @@ namespace App.Domain.Core.HomeService.Contracts.AppServices
         Task<List<BidDto>> GetAllByExpertId(int expertId, CancellationToken cancellationToken);
         Task<List<BidDto>> GetAllByOrderId(int orderId, CancellationToken cancellationToken);
         Task<BidDto>? GetById(int id, CancellationToken cancellationToken);
-        Task Approve(int orderId, int bidid, CancellationToken cancellationToken);
+        Task Approve(int expertFinalId, int orderId, int bidid, CancellationToken cancellationToken);
         Task Set(BidDto dto, CancellationToken cancellationToken);
         Task Update(BidDto dto, CancellationToken cancellationToken);
         Task Delete(int id, CancellationToken cancellationToken);

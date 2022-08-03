@@ -18,6 +18,7 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 builder.Services.ConfigureApplicationCookie(options =>{
     options.LoginPath = "/Account/Login";
     options.AccessDeniedPath = "/Account/AccessDenied";
@@ -51,6 +52,13 @@ builder.Services.AddIdentity<AppUser, IdentityRole<int>>(
 //builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddHttpContextAccessor();
 
+#region "AppFile"
+builder.Services.AddScoped<IAppFileService, AppFileService>();
+builder.Services.AddScoped<IAppFileRepository, AppFileRepository>();
+#endregion
+#region "UploadService"
+builder.Services.AddScoped<IUploadService, UploadService>();
+#endregion
 #region "AppUser"
 builder.Services.AddScoped<IAppUserAppService, AppUserAppService>();
 builder.Services.AddScoped<IAppUserService, AppUserService>();

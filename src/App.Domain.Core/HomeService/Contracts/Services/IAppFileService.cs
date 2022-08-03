@@ -12,7 +12,7 @@ namespace App.Domain.Core.HomeService.Contracts.Services
         Task<AppFileDto>? Get(int id, CancellationToken cancellationToken);
         Task<AppFileDto>? Get(string fileAddress, CancellationToken cancellationToken);
         Task<List<AppFileDto>> GetAll(CancellationToken cancellationToken);
-        Task Set(AppFileDto dto, CancellationToken cancellationToken);
+        Task<int> Set(AppFileDto dto, CancellationToken cancellationToken);
         Task Update(AppFileDto dto, CancellationToken cancellationToken);
         Task Delete(int id, CancellationToken cancellationToken);
     }

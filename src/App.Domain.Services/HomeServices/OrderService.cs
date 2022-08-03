@@ -26,14 +26,19 @@ namespace App.Domain.Services.HomeServices
              return await _orderRepository.GetAll(cancellationToken);
         }
 
-        public async Task<List<OrderDto>> GetAllByCustomerId(int customerId, CancellationToken cancellationToken)
+        public async Task<List<OrderDto>?> GetAllByCustomerId(int customerId, CancellationToken cancellationToken)
         {
             return await _orderRepository.GetAllByCustomerId(customerId, cancellationToken);
         }
 
-        public async Task<List<OrderDto>> GetAllByExpertId(int expertId, CancellationToken cancellationToken)
+        public async Task<List<OrderDto>?> GetAllByExpertId(int expertId,int serviceId, CancellationToken cancellationToken)
         {
-            return await _orderRepository.GetAllByExpertId(expertId, cancellationToken);
+            return await _orderRepository.GetAllByExpertId(expertId,serviceId, cancellationToken);
+        }
+
+        public async Task<List<OrderDto>?> GetAllByOrderId(int orderId, CancellationToken cancellationToken)
+        {
+            return await _orderRepository.GetAllByOrderId(orderId, cancellationToken);
         }
 
         public async Task<OrderDto>? GetByOrderId(int orderId, CancellationToken cancellationToken)

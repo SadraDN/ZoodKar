@@ -17,9 +17,9 @@ namespace App.Domain.AppServices.HomeServices
             _bidService = BidService;
         }
 
-        public async Task Approve(int orderId,int bidId, CancellationToken cancellationToken)
+        public async Task Approve(int expertFinalId, int orderId,int bidId, CancellationToken cancellationToken)
         {
-            await _bidService.Approve(orderId, bidId, cancellationToken);
+            await _bidService.Approve(expertFinalId, orderId, bidId, cancellationToken);
         }
 
         public Task Delete(int id, CancellationToken cancellationToken)

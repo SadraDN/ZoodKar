@@ -1,6 +1,6 @@
 ﻿@using App.EndPoints.UI.Models.Order
 @model OrderInputVM
-<form method="post" asp-controller="Order" asp-action="Create">
+<form method="post" asp-controller="Order" asp-action="Create" enctype="multipart/form-data">
 
     <div class="border p-3">
         <div class="form-group row">
@@ -12,11 +12,11 @@
 
                 <div class="form-group row p-3">
                     <div class="col-4">
-                        <label asp-for="ServiceTime"></label>
+                        <label asp-for="ServiceDate"></label>
                     </div>
                     <div class="col-8">
-                        <input type="datetime-local" asp-for="ServiceTime" class="form-control" />
-                        <span asp-validation-for="ServiceTime" class="text-danger"></span>
+                        <input type="datetime-local" asp-for="ServiceDate" class="form-control" />
+                        <span asp-validation-for="ServiceDate" class="text-danger"></span>
                     </div>
                 </div>
 
@@ -27,6 +27,15 @@
                     <div class="col-8">
                         <input type="text" asp-for="Address" class="form-control" />
                         <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row p-3">
+                    <div class="col-4">
+                        <label for="image">عکس سفارش</label>
+                    </div>
+                    <div class="col-8">
+                        <input type="file" id="image" class="form-control" name="orderFile" multiple />
                     </div>
                 </div>
 

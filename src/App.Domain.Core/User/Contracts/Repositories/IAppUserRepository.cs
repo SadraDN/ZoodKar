@@ -1,5 +1,6 @@
 ﻿
 using App.Domain.Core.User.Dtos;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 
 namespace App.Domain.Core.User.Contracts.Repositories

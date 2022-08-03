@@ -15,6 +15,7 @@
         public int? FinalExpertUserId { get; set; }
         public string? FinalExpertUserName { get; set; }
         public DateTime CreatedAt { get; set; }
-        //public virtual List<AppFileDto> AppFiles { get; set; } 
+        public List<AppFileDto>? AppFiles { get; set; } = new List<AppFileDto>();
+        public List<BidDto>? Bids { get; set; } = new List<BidDto>();
     }
 }

@@ -7,6 +7,7 @@
             Orders = new HashSet<Order>();
             ServiceComments = new HashSet<ServiceComment>();
             ServiceFiles = new HashSet<ServiceFile>();
+            ExpertFavoriteServices = new HashSet<ExpertFavoriteService>();
         }
 
         public int Id { get; set; }
@@ -17,6 +18,7 @@
 
         public virtual Category Category { get; set; } 
         public virtual ICollection<Order> Orders { get; set; }
+        public virtual ICollection<ExpertFavoriteService> ExpertFavoriteServices { get; set; }
         public virtual ICollection<ServiceComment> ServiceComments { get; set; }
         public virtual ICollection<ServiceFile> ServiceFiles { get; set; }
     }

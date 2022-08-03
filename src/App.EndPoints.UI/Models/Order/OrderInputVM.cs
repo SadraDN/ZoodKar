@@ -3,6 +3,6 @@
     public class OrderInputVM
     {
         public string Address { get; set; }
-        public DateTime ServiceTime { get; set; }
+        public DateTime ServiceDate { get; set; }
     }
 }

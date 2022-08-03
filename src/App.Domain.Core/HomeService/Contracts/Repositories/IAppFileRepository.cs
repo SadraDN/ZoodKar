@@ -21,7 +21,7 @@ namespace App.Domain.Core.HomeService.Contracts.Repositories
 
         #region "Commands"
 
-        Task Add(AppFileDto dto, CancellationToken cancellationToken);
+        Task<int> Add(AppFileDto dto, CancellationToken cancellationToken);
         Task Update(AppFileDto dto, CancellationToken cancellationToken);
         Task Delete(int id, CancellationToken cancellationToken);
 
