@@ -1,0 +1,49 @@
+﻿@using App.Domain.Core.HomeService.Dtos
+@model BidDto
+<form method="post" asp-controller="Order" asp-action="ExpertBid">
+
+    <div class="border p-3">
+        <div class="form-group row">
+            <h2 class="text-info pl-3">ارسال پیشنهاد</h2>
+        </div>
+
+        <div class="row">
+            <div class="col-8">
+
+                <div class="form-group row p-3">
+                    <div class="col-4">
+                        <label asp-for="SuggestedPrice"></label>
+                    </div>
+                    <div class="col-8">
+                        <input  asp-for="SuggestedPrice" class="form-control" />
+                        <span asp-validation-for="SuggestedPrice" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="d-inline-flex justify-content-around">
+                        <button type="submit" asp-route-orderId="@ViewBag.OrderId" class="btn btn-primary mx-1">ارسال</button>
+                        <div>
+                            <a asp-controller="Order" asp-action="ExpertRequest"  class="btn btn-success">بازگشت</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+
+@section Scripts{
+    @{
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+
+                $(function() {
+            $(".select-chosen").chosen({rtl: true});
+        });
+
+    </script>
+}
+
+}

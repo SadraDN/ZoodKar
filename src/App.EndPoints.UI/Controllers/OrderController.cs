@@ -99,7 +99,7 @@ namespace App.EndPoints.UI.Controllers
         [Authorize(Roles = "CustomerRole")]
         public async Task<IActionResult> BidsList(int orderId, CancellationToken cancellationToken)
         {
-            var bids = await _bidAppService.GetAllByOrderId(orderId, cancellationToken);
+            var bids = await _orderAppService.GetAllByOrderId(orderId, cancellationToken);
             return View(bids);
         }
 
@@ -107,14 +107,40 @@ namespace App.EndPoints.UI.Controllers
         public async Task<IActionResult> Approve(int expertUserId, int orderId, int bidId, CancellationToken cancellationToken)
         {
             await _bidAppService.Approve(expertUserId, orderId, bidId, cancellationToken);
-            return RedirectToAction($"Index");
+            return RedirectToAction("BidsList");
         }
 
         [Authorize(Roles = "ExpertRole")]
-        public async Task<IActionResult> ExpertOrders(CancellationToken cancellationToken)
+        public async Task<IActionResult> ExpertRequest(CancellationToken cancellationToken)
+        {
+            var expertOrders = await _orderAppService.GetAllExpertOrders(cancellationToken);
+            return View(expertOrders);
+        }
+
+        [Authorize(Roles = "ExpertRole")]
+        [HttpGet]
+        public IActionResult ExpertBid(int orderId)
+        {
+            ViewBag.OrderId = orderId;
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> ExpertBid(BidDto model, int orderId, CancellationToken cancellationToken)
         {
             var expertId = await _appUserAppService.GetLoggedUserId();
-            return View();
+
+            if (ModelState.IsValid)
+            {
+                var bid = new BidDto()
+                {
+                    ExpertUserId = expertId,
+                    OrderId = orderId,
+                    SuggestedPrice = model.SuggestedPrice,
+                };
+                await _bidAppService.Set(bid, cancellationToken);
+                return RedirectToAction("ExpertRequest");
+            }
+            return View(model);
         }
     }
 }

@@ -12,12 +12,15 @@ namespace App.Domain.AppServices.HomeServices
     public class BidAppService : IBidAppService
     {
         private readonly IBidService _bidService;
-        public BidAppService(IBidService BidService)
+        private readonly IOrderService _orderService;
+        public BidAppService(IBidService BidService,
+            IOrderService orderService)
         {
             _bidService = BidService;
+            _orderService = orderService;
         }
 
-        public async Task Approve(int expertFinalId, int orderId,int bidId, CancellationToken cancellationToken)
+        public async Task Approve(int expertFinalId, int orderId, int bidId, CancellationToken cancellationToken)
         {
             await _bidService.Approve(expertFinalId, orderId, bidId, cancellationToken);
         }
@@ -47,9 +50,12 @@ namespace App.Domain.AppServices.HomeServices
             return await _bidService.GetById(id, cancellationToken);
         }
 
-        public Task Set(BidDto dto, CancellationToken cancellationToken)
+        public async Task Set(BidDto dto, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var order = await _orderService.GetByOrderId(dto.OrderId, cancellationToken);
+            order.StatusId = 2;
+            await _orderService.Update(order,cancellationToken);
+            await _bidService.Set(dto, cancellationToken);
         }
 
         public async Task Update(BidDto dto, CancellationToken cancellationToken)

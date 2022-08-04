@@ -1,6 +1,7 @@
 ﻿using App.Domain.Core.HomeService.Contracts.Repositories;
 using App.Domain.Core.HomeService.Dtos;
 using App.Domain.Core.HomeService.Entities;
+using App.Domain.Core.User.Dtos;
 using App.Infrastructures.Database.SqlServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -129,40 +130,49 @@ namespace App.Infrastructures.Repository.Ef.HomeServices
 
         public async Task<List<OrderDto>?> GetAllByCustomerId(int customerId, CancellationToken cancellationToken)
         {
-            return await _context.Orders.Where(x => x.CustomerUserId == customerId).Select(p => new OrderDto()
+            var record = await _context.Orders.Where(p => p.CustomerUserId == customerId).Select(p => new OrderDto()
             {
                 Id = p.Id,
                 ServiceId = p.ServiceId,
-                ServiceName = p.Service.Title,
                 StatusId = p.StatusId,
                 StatusName = p.Status.Title,
+                ServiceDate = p.ServiceDate,
+                ServiceName = p.Service.Title,
                 CustomerUserId = p.CustomerUserId,
+                CustomerUserName = p.Customer.Name,
                 FinalExpertUserId = p.FinalExpertUserId,
                 FinalExpertUserName = p.Expert.Name,
                 ServiceBasePrice = p.Service.Price,
-                ServiceDate = p.ServiceDate,
                 CreatedAt = p.CreatedAt,
                 SerivceAddress = p.SerivceAddress,
+                AppFiles = p.OrderFiles.Select(x => new AppFileDto
+                {
+                    CreatedAt = x.CreatedAt,
+                    CreatedUserId = x.CreatedUserId,
+                    Id = x.FileId,
+                    EntityId = x.File.EntityId,
+                    FileAddress = x.File.FileAddress,
+                }).ToList(),
                 Bids = p.Bids.Select(b => new BidDto()
                 {
-                    CreatedAt = p.CreatedAt,
-                    ExpertName = p.Expert.Name,
+                    CreatedAt = b.CreatedAt,
+                    ExpertName = b.AppUser.Name,
                     ExpertUserId = b.ExpertUserId,
                     Id = b.Id,
                     IsApproved = b.IsApproved,
                     OrderId = b.OrderId,
                     SuggestedPrice = b.SuggestedPrice,
 
-                }).ToList()
+                }).ToList(),
             }).ToListAsync(cancellationToken);
+            return record;
         }
 
-        public async Task<List<OrderDto>?> GetAllByExpertId(int expertId,int serviceId,CancellationToken cancellationToken)
+        public async Task<List<OrderDto>?> GetAllByExpertId(int expertId,CancellationToken cancellationToken)
         {
-            return await _context.Orders.Where(x => x.FinalExpertUserId == expertId && x.ServiceId == serviceId).Select(p => new OrderDto()
+            var result = await _context.Orders.Where(x => x.FinalExpertUserId == expertId).Select(p => new OrderDto()
             {
                 Id = p.Id,
-                ServiceId = p.ServiceId,
                 ServiceName = p.Service.Title,
                 StatusId = p.StatusId,
                 StatusName = p.Status.Title,
@@ -173,7 +183,9 @@ namespace App.Infrastructures.Repository.Ef.HomeServices
                 ServiceDate = p.ServiceDate,
                 CreatedAt = p.CreatedAt,
                 SerivceAddress = p.SerivceAddress,
+                ServiceId = p.ServiceId,
             }).ToListAsync(cancellationToken);
+            return result;
         }
 
         public async Task<OrderDto>? GetByOrderId(int orderId, CancellationToken cancellationToken)
@@ -203,13 +215,14 @@ namespace App.Infrastructures.Repository.Ef.HomeServices
                 }).ToList(),
                 Bids = p.Bids.Select(b => new BidDto()
                 {
-                    CreatedAt = p.CreatedAt,
-                    ExpertName = p.Expert.Name,
+                    CreatedAt = b.CreatedAt,
+                    ExpertName = b.AppUser.Name,
                     ExpertUserId = b.ExpertUserId,
                     Id = b.Id,
                     IsApproved = b.IsApproved,
                     OrderId = b.OrderId,
                     SuggestedPrice = b.SuggestedPrice,
+
 
                 }).ToList(),
             }).SingleOrDefaultAsync(cancellationToken);
@@ -243,8 +256,8 @@ namespace App.Infrastructures.Repository.Ef.HomeServices
                 }).ToList(),
                 Bids = p.Bids.Select(b => new BidDto()
                 {
-                    CreatedAt = p.CreatedAt,
-                    ExpertName = p.Expert.Name,
+                    CreatedAt = b.CreatedAt,
+                    ExpertName = b.AppUser.Name,
                     ExpertUserId = b.ExpertUserId,
                     Id = b.Id,
                     IsApproved = b.IsApproved,
@@ -254,6 +267,29 @@ namespace App.Infrastructures.Repository.Ef.HomeServices
                 }).ToList(),
             }).ToListAsync(cancellationToken);
             return record;
+        }
+
+        public async Task<List<OrderDto>?> GetAllExpertOrders(AppUserDto expert, CancellationToken cancellationToken)
+        {
+
+           var result =await _context.Orders.Where(x => expert.Services.Select(x => x.Id).Contains(x.Service.Id) && x.StatusId == 1 || x.StatusId==2).Select(x=>new OrderDto
+           {
+               Id = x.Id,
+               CreatedAt = x.CreatedAt,
+               CustomerUserId = x.CustomerUserId,
+               CustomerUserName = x.Customer.Name,
+               FinalExpertUserId = x.FinalExpertUserId,
+               FinalExpertUserName=x.Expert.Name,
+               SerivceAddress = x.SerivceAddress,
+               ServiceBasePrice = x.Service.Price,
+               ServiceDate = x.ServiceDate,
+               ServiceName = x.Service.Title,
+               ServiceId = x.Service.Id,
+               StatusId = x.StatusId,
+               StatusName = x.Status.Title,
+
+           }).ToListAsync(cancellationToken);
+            return result;
         }
     }
 }

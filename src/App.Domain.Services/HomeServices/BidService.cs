@@ -64,6 +64,8 @@ namespace App.Domain.Services.HomeServices
 
         public async Task Set(BidDto dto, CancellationToken cancellationToken)
         {
+            dto.CreatedAt = DateTime.Now;
+            dto.IsApproved = false;
             await _bidRepository.Add(dto, cancellationToken);
         }
 

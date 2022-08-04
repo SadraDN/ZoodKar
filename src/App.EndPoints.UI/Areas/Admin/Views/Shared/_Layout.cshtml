@@ -9,7 +9,7 @@
     <link href="~/AdminAreaFiles/css/app.css" rel="stylesheet">
     <link href="~/AdminAreaFiles/css/custom.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    <link href="~/AdminAreaFiles/css/chosen.min.css" rel="stylesheet" />
+    <link href="~/chosen/chosen.min.css" rel="stylesheet" />
 
 
 </head>
@@ -463,9 +463,10 @@
 
         
     </script>
+    <script src="/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     
     @await RenderSectionAsync("Scripts", required: false)
-    <script src="~/AdminAreaFiles/js/chosen.jquery.min.js"></script>
+    <script src="~/chosen/chosen.jquery.min.js"></script>
 </body>
 </html>

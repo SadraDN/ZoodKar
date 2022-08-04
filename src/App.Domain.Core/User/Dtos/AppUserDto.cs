@@ -19,6 +19,8 @@ namespace App.Domain.Core.User.Dtos
         public string? PicUrl { get; set; }
         public string? HomeAddress { get; set; }
         public IList<string?> Roles { get; set; }
-        public virtual List<ExpertFavoriteServiceDto> ExpertFavoriteCategories { get; set; } = new List<ExpertFavoriteServiceDto>();
+        public List<ExpertFavoriteServiceDto>? ExpertFavoriteServices { get; set; } 
+        public List<ServiceDto>? Services { get; set; } 
+        public List<AppFileDto>? AppFiles { get; set; } = new List<AppFileDto>();
     }
 }

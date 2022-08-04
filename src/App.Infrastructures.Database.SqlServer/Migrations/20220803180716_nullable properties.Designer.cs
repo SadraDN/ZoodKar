@@ -4,6 +4,7 @@ using App.Infrastructures.Database.SqlServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace App.Infrastructures.Database.SqlServer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220803180716_nullable properties")]
+    partial class nullableproperties
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,7 +53,7 @@ namespace App.Infrastructures.Database.SqlServer.Migrations
 
                     b.HasIndex("EntityId");
 
-                    b.ToTable("Files", (string)null);
+                    b.ToTable("Files");
                 });
 
             modelBuilder.Entity("App.Domain.Core.HomeService.Entities.Bid", b =>
@@ -84,7 +86,7 @@ namespace App.Infrastructures.Database.SqlServer.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("Bids", (string)null);
+                    b.ToTable("Bids");
                 });
 
             modelBuilder.Entity("App.Domain.Core.HomeService.Entities.Category", b =>
@@ -102,7 +104,7 @@ namespace App.Infrastructures.Database.SqlServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("App.Domain.Core.HomeService.Entities.Entity", b =>
@@ -120,7 +122,7 @@ namespace App.Infrastructures.Database.SqlServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Entities", (string)null);
+                    b.ToTable("Entities");
                 });
 
             modelBuilder.Entity("App.Domain.Core.HomeService.Entities.ExpertFavoriteService", b =>
@@ -147,7 +149,7 @@ namespace App.Infrastructures.Database.SqlServer.Migrations
 
                     b.HasIndex("ServiceId");
 
-                    b.ToTable("ExpertFavoriteCategories", (string)null);
+                    b.ToTable("ExpertFavoriteCategories");
                 });
 
             modelBuilder.Entity("App.Domain.Core.HomeService.Entities.Order", b =>
@@ -194,7 +196,7 @@ namespace App.Infrastructures.Database.SqlServer.Migrations
 
                     b.HasIndex("StatusId");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("App.Domain.Core.HomeService.Entities.OrderFile", b =>
@@ -224,7 +226,7 @@ namespace App.Infrastructures.Database.SqlServer.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("OrderFiles", (string)null);
+                    b.ToTable("OrderFiles");
                 });
 
             modelBuilder.Entity("App.Domain.Core.HomeService.Entities.OrderStatus", b =>
@@ -242,7 +244,7 @@ namespace App.Infrastructures.Database.SqlServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("OrderStatuses", (string)null);
+                    b.ToTable("OrderStatuses");
                 });
 
             modelBuilder.Entity("App.Domain.Core.HomeService.Entities.Service", b =>
@@ -272,7 +274,7 @@ namespace App.Infrastructures.Database.SqlServer.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Services", (string)null);
+                    b.ToTable("Services");
                 });
 
             modelBuilder.Entity("App.Domain.Core.HomeService.Entities.ServiceComment", b =>
@@ -306,7 +308,7 @@ namespace App.Infrastructures.Database.SqlServer.Migrations
 
                     b.HasIndex("ServiceId");
 
-                    b.ToTable("ServiceComments", (string)null);
+                    b.ToTable("ServiceComments");
                 });
 
             modelBuilder.Entity("App.Domain.Core.HomeService.Entities.ServiceFile", b =>
@@ -336,7 +338,7 @@ namespace App.Infrastructures.Database.SqlServer.Migrations
 
                     b.HasIndex("ServiceId");
 
-                    b.ToTable("ServiceFiles", (string)null);
+                    b.ToTable("ServiceFiles");
                 });
 
             modelBuilder.Entity("App.Domain.Core.User.Entities.AppUser", b =>

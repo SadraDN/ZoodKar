@@ -28,7 +28,7 @@
                         <td>@item.ExpertName</td>
                         <td>@item.SuggestedPrice</td>
                         <td>@order.StatusName</td>
-                        <td>@order.FinalExpertUserId</td>
+                        <td>@item.ExpertUserId</td>
                         <td><a asp-controller="Order" asp-action="Approve" asp-route-orderId="@order.Id" asp-route-bidId="@item.Id" asp-route-expertUserId="@item.ExpertUserId" class="btn btn-info">تایید پیشنهاد</a></td>
                     </tr>
                 }
@@ -40,7 +40,7 @@
                     <tr>
                         <td>@order.Id</td>
                         <td>@order.CreatedAt</td>
-                        <td>@item.ExpertName</td>
+                        <td>@order.FinalExpertUserName</td>
                         <td>@item.SuggestedPrice</td>
                         <td>@order.StatusName</td>
                         <td>@order.FinalExpertUserId</td>
@@ -48,6 +48,16 @@
                     </tr>
                 }
             }
+
+            @if (@order.StatusId == 6)
+            {
+                <div class="form-floating">
+                    <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea"></textarea>
+                    <label for="floatingTextarea">Comments</label>
+                </div>
+            }
+
+
 
         }
     </tbody>

@@ -20,6 +20,6 @@
         public virtual ICollection<Order> Orders { get; set; }
         public virtual ICollection<ExpertFavoriteService> ExpertFavoriteServices { get; set; }
         public virtual ICollection<ServiceComment> ServiceComments { get; set; }
-        public virtual ICollection<ServiceFile> ServiceFiles { get; set; }
+        public virtual ICollection<ServiceFile>? ServiceFiles { get; set; }
     }
 }

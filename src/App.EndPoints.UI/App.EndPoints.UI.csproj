@@ -30,6 +30,7 @@
 
 	<ItemGroup>
 	  <Folder Include="Areas\Admin\Data\" />
+	  <Folder Include="Areas\Admin\Views\Category\" />
 	  <Folder Include="wwwroot\img\Order\" />
 	  <Folder Include="wwwroot\img\photos\" />
 	</ItemGroup>

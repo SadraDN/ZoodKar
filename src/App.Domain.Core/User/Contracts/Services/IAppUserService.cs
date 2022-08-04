@@ -19,6 +19,8 @@ namespace App.Domain.Core.User.Contracts.Services
         Task<SignInResult> Login(AppUserDto dto,bool rememberMe);
         Task SignOutUser();
         Task Delete(int id);
+        Task UpdateUsers(AppUserDto dto);
+        Task UpdateExpertSkills(int expertId, List<int> services, CancellationToken cancellationToken);
         Task<List<RolesDto>> GetRoles();
     }
 }

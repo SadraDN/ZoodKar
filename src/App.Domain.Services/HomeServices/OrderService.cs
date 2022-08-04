@@ -1,6 +1,7 @@
 ﻿using App.Domain.Core.HomeService.Contracts.Repositories;
 using App.Domain.Core.HomeService.Contracts.Services;
 using App.Domain.Core.HomeService.Dtos;
+using App.Domain.Core.User.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,9 +32,9 @@ namespace App.Domain.Services.HomeServices
             return await _orderRepository.GetAllByCustomerId(customerId, cancellationToken);
         }
 
-        public async Task<List<OrderDto>?> GetAllByExpertId(int expertId,int serviceId, CancellationToken cancellationToken)
+        public async Task<List<OrderDto>?> GetAllByExpertId(int expertId, CancellationToken cancellationToken)
         {
-            return await _orderRepository.GetAllByExpertId(expertId,serviceId, cancellationToken);
+            return await _orderRepository.GetAllByExpertId(expertId, cancellationToken);
         }
 
         public async Task<List<OrderDto>?> GetAllByOrderId(int orderId, CancellationToken cancellationToken)
@@ -61,6 +62,11 @@ namespace App.Domain.Services.HomeServices
         public async Task Update(OrderDto dto, CancellationToken cancellationToken)
         {
             await _orderRepository.Update(dto, cancellationToken);
+        }
+
+        public async Task<List<OrderDto>?> GetAllExpertOrders(AppUserDto expert,CancellationToken cancellationToken)
+        {
+           return await _orderRepository.GetAllExpertOrders(expert, cancellationToken);
         }
     }
 }

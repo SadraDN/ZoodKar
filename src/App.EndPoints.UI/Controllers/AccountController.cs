@@ -1,8 +1,10 @@
-﻿using App.Domain.Core.User.Contracts.AppServices;
+﻿using App.Domain.Core.HomeService.Contracts.AppServices;
+using App.Domain.Core.User.Contracts.AppServices;
 using App.Domain.Core.User.Dtos;
 using App.EndPoints.UI.Models.Account;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace App.EndPoints.UI.Controllers
 {
@@ -10,11 +12,14 @@ namespace App.EndPoints.UI.Controllers
     {
         private readonly IAppUserAppService _appUserAppService;
         private readonly IHttpContextAccessor _httpContext;
+        private readonly IServiceAppService _serviceAppService;
         public AccountController(IAppUserAppService AppUserAppService,
-            IHttpContextAccessor httpContext)
+            IHttpContextAccessor httpContext
+            , IServiceAppService serviceAppService)
         {
             _appUserAppService = AppUserAppService;
             _httpContext = httpContext;
+            _serviceAppService = serviceAppService;
         }
 
         [AllowAnonymous]
@@ -96,6 +101,50 @@ namespace App.EndPoints.UI.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Edit()
+        {
+            var loggedUser = await _appUserAppService.GetLoggedUserId();
+            ViewBag.UserId = loggedUser;
+            var user = await _appUserAppService.Get(loggedUser);
+            return View(user);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(AppUserDto model)
+        {
+            var loggedUser = await _appUserAppService.GetLoggedUserId();
+            var user = new AppUserDto
+            {
+                Id = loggedUser,
+                UserName = model.UserName,
+                Name = model.Name,
+                Password = model.Password,
+                Email = model.Email,
+            };
+            await _appUserAppService.UpdateUsers(user);
+
+            return RedirectToAction("Index", "Home");
+        }
+        [HttpGet]
+        public async Task<IActionResult> EditExpertSkills(CancellationToken cancellationToken)
+        {
+            var loggeduser = await _appUserAppService.GetLoggedUserId();
+            ViewBag.UserId = loggeduser;
+            var user = await _appUserAppService.Get(loggeduser);
+            var services = await _serviceAppService.GetAll(cancellationToken);
+            ViewBag.Services = services.Where(x=>!user.Services.Any(y => y.Title == x.Title))
+                .Select(x => new SelectListItem()
+            { Value = x.Id.ToString(), Text = x.Title }).ToList();
+            var userServices = user.Services;
+            return View(userServices);
+        }
+        [HttpPost]
+        public async Task<IActionResult> EditExpertSkills(int expertId, List<int> services, CancellationToken cancellationToken)
+        {
+            await _appUserAppService.UpdateExpertSkills(expertId, services, cancellationToken);
+            return RedirectToAction("Index","Home");
+        }
 
         public IActionResult AccessDenied()
         {

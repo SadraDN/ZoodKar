@@ -1,4 +1,5 @@
 ﻿using App.Domain.Core.HomeService.Dtos;
+using App.Domain.Core.User.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +12,10 @@ namespace App.Domain.Core.HomeService.Contracts.Services
     {
         Task<List<OrderDto>> GetAll(CancellationToken cancellationToken);
         Task<List<OrderDto>?> GetAllByCustomerId(int customerId, CancellationToken cancellationToken);
-        Task<List<OrderDto>?> GetAllByExpertId(int expertId,int serviceId, CancellationToken cancellationToken);
+        Task<List<OrderDto>?> GetAllByExpertId(int expertId, CancellationToken cancellationToken);
         Task<OrderDto>? GetByOrderId(int orderId, CancellationToken cancellationToken);
         Task<List<OrderDto>?> GetAllByOrderId(int orderId, CancellationToken cancellationToken);
+        Task<List<OrderDto>?> GetAllExpertOrders(AppUserDto expert, CancellationToken cancellationToken);
         Task Set(OrderDto dto, CancellationToken cancellationToken);
         Task Update(OrderDto dto, CancellationToken cancellationToken);
         Task Delete(int id, CancellationToken cancellationToken);

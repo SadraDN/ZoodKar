@@ -1,4 +1,5 @@
-﻿using App.Domain.Core.User.Contracts.AppServices;
+﻿using App.Domain.Core.HomeService.Contracts.Services;
+using App.Domain.Core.User.Contracts.AppServices;
 using App.Domain.Core.User.Contracts.Services;
 using App.Domain.Core.User.Dtos;
 using Microsoft.AspNetCore.Identity;
@@ -15,11 +16,14 @@ namespace App.Domain.AppServices.User
     {
         private readonly ILogger<AppUserAppService> _logger;
         private readonly IAppUserService _appUserService;
+        private readonly IAppFileService _appFileService;
         public AppUserAppService(IAppUserService AppUserService
-            , ILogger<AppUserAppService> logger)
+            , ILogger<AppUserAppService> logger,
+            IAppFileService appFileService)
         {
             _appUserService = AppUserService;
             _logger = logger;
+            _appFileService = appFileService;
         }
         public async Task<IdentityResult> Create(AppUserDto dto)
         {
@@ -41,9 +45,22 @@ namespace App.Domain.AppServices.User
             throw new NotImplementedException();
         }
 
-        public async Task<List<AppUserDto>> GetAll(string? search)
+        public async Task<List<AppUserDto>> GetAll(string? search, CancellationToken cancellationToken)
         {
-            return await _appUserService.GetAll(search);
+            var users = await _appUserService.GetAll(search);
+            foreach (var user in users)
+            {
+                if (user.PictureFileId != null)
+                {
+                    var result = await _appFileService.Get((int)user.PictureFileId, cancellationToken);
+                    user.PicUrl = result.FileAddress;
+                }
+                else
+                {
+                    user.PicUrl = "~/img/Service/istockphoto-1300845620-612x612.jpg";
+                }
+            }
+            return users;
         }
 
         public Task<int>? GetLoggedUserId()
@@ -58,7 +75,7 @@ namespace App.Domain.AppServices.User
 
         public async Task<SignInResult> Login(AppUserDto dto, bool rememberMe)
         {
-            return await _appUserService.Login(dto,rememberMe);
+            return await _appUserService.Login(dto, rememberMe);
         }
 
         public async Task SignOutUser()
@@ -70,6 +87,16 @@ namespace App.Domain.AppServices.User
         {
             await _appUserService.Update(dto);
 
+        }
+
+        public async Task UpdateExpertSkills(int expertId, List<int> services, CancellationToken cancellationToken)
+        {
+            await _appUserService.UpdateExpertSkills(expertId, services, cancellationToken);
+        }
+
+        public async Task UpdateUsers(AppUserDto dto)
+        {
+            await _appUserService.UpdateUsers(dto);
         }
     }
 }

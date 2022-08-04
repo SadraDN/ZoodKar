@@ -41,6 +41,7 @@
             <span asp-validation-for="Roles" class="text-danger"></span>
         </div>
     </div>
+ 
 
     <div class="form-group mb-3">
         <label asp-for="Password"></label>
@@ -53,12 +54,13 @@
     <input type="submit" value="ویرایش کاربر" class="btn btn-warning" />
 </form>
 @section Scripts{
-<script>
+    <partial name="_ValidationScriptsPartial" />
+    <script>
 
-    $(function() {
-        $(".select-chosen").chosen({rtl: true});
-    });
+        $(function() {
+            $(".select-chosen").chosen({rtl: true});
+        });
 
 
-</script>
+    </script>
 }

@@ -2,6 +2,7 @@
 using App.Domain.Core.HomeService.Contracts.Services;
 using App.Domain.Core.HomeService.Dtos;
 using App.Domain.Core.User.Contracts.Services;
+using App.Domain.Core.User.Dtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -46,9 +47,9 @@ namespace App.Domain.AppServices.HomeServices
             return _orderService.GetAllByCustomerId(customerId, cancellationToken);
         }
 
-        public Task<List<OrderDto>?> GetAllByExpertId(int expertId,int serviceId, CancellationToken cancellationToken)
+        public Task<List<OrderDto>?> GetAllByExpertId(int expertId, CancellationToken cancellationToken)
         {
-            return _orderService.GetAllByExpertId(expertId, serviceId, cancellationToken);
+            return _orderService.GetAllByExpertId(expertId, cancellationToken);
         }
 
         public async Task<List<OrderDto>?> GetAllByOrderId(int orderId, CancellationToken cancellationToken)
@@ -88,6 +89,13 @@ namespace App.Domain.AppServices.HomeServices
         public async Task Update(OrderDto dto, CancellationToken cancellationToken)
         {
             await _orderService.Update(dto, cancellationToken);
+        }
+        public async Task<List<OrderDto>?> GetAllExpertOrders(CancellationToken cancellationToken)
+        {
+            var expert = await _appUserService.GetLoggedUserId();
+            var result = await _appUserService.Get(expert);
+            var orders = await _orderService.GetAllExpertOrders(result,cancellationToken);
+            return orders;
         }
     }
 }

@@ -1,0 +1,32 @@
+﻿@using App.Domain.Core.HomeService.Dtos
+@model List<ServiceDto>
+
+<form asp-controller="Account" asp-action="EditExpertSkills" method="post">
+    <input style="display:none" name="expertId" value="@ViewBag.UserId" />
+    <div class="mb-3">
+        <label for="services" class="form-label">ویرایش مهارت ها</label>
+        <select name="services" class="select-chosen form-select" tabindex="8" multiple style="width:350px;" data-placeholder="مهارت ها" asp-items="@ViewBag.Services">
+            @if (Model != null)
+            {
+                @foreach (var service in Model)
+                {
+                    <option value=@service.Id selected>@service.Title</option>
+                }
+            }
+
+        </select>
+    </div>
+    <input class="btn btn-success" type="submit" value="ویرایش" />
+</form>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+
+        $(function() {
+            $(".select-chosen").chosen({rtl: true});
+        });
+
+
+    </script>
+}

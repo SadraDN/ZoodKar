@@ -27,7 +27,7 @@ namespace App.Infrastructures.Repository.Ef.HomeServices
                 Title = dto.Title,
                 ShortDescription = dto.ShortDescription,
                 Price = dto.Price,
-                
+
             };
             await _context.AddAsync(record, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
@@ -37,7 +37,7 @@ namespace App.Infrastructures.Repository.Ef.HomeServices
                 {
                     ServiceId = record.Id,
                     FileId = file.Id,
-                    CreatedUserId=file.CreatedUserId,
+                    CreatedUserId = file.CreatedUserId,
                     CreatedAt = DateTime.Now,
                 };
                 record.ServiceFiles.Add(serviceFiles);
@@ -50,7 +50,7 @@ namespace App.Infrastructures.Repository.Ef.HomeServices
             record.CategoryId = dto.CategoryId;
             record.Title = dto.Title;
             record.ShortDescription = dto.ShortDescription;
-            record.Price = dto.Price;   
+            record.Price = dto.Price;
 
             var serviceFiles = new List<ServiceFile>();
             foreach (var file in dto.AppFiles)
@@ -79,16 +79,24 @@ namespace App.Infrastructures.Repository.Ef.HomeServices
 
         public async Task<List<ServiceDto>> GetAll(CancellationToken cancellationToken)
         {
-            return await _context.Services.Select(p => new ServiceDto()
+            var service = await _context.Services.Select(p => new ServiceDto()
             {
                 Id = p.Id,
                 CategoryId = p.CategoryId,
                 Title = p.Title,
                 ShortDescription = p.ShortDescription,
                 Price = p.Price,
-                CategoryName = p.Category.Title
-            
+                CategoryName = p.Category.Title,
+                AppFiles = p.ServiceFiles.Select(x => new AppFileDto
+                {
+                    CreatedAt = x.CreatedAt,
+                    CreatedUserId = x.CreatedUserId,
+                    Id = x.FileId,
+                    EntityId = x.File.EntityId,
+                    FileAddress = x.File.FileAddress,
+                }).ToList(),
             }).ToListAsync(cancellationToken);
+            return service;
         }
 
         public async Task<ServiceDto>? GetByCategoryId(int categoryId, CancellationToken cancellationToken)

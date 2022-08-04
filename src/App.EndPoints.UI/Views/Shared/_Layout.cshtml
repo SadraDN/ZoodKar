@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/App.EndPoints.UI.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/chosen/chosen.min.css" />
 </head>
 <body>
     <header>
@@ -24,17 +25,31 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">حریم خصوصی</a>
-                        </li> 
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="Index">سفارش سرویس</a>
-                        </li> 
+                        </li>
+                        @if (User.IsInRole("ExpertRole"))
+                        {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="ExpertRequest"> درخواست ها</a>
+                        </li>
+                        }
+                         @if (User.IsInRole("CustomerRole"))
+                        {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="OrdersList"> سفارشات</a>
+                        </li>
+                        }
                     </ul>
 
                     <ul>
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="mb-3"><p>@User.Identity.Name</p></li>
+                            <li><a asp-controller="Account" asp-action="Edit" class="btn btn-info text-white">ویرایش اطلاعات</a></li>
                             <li><a asp-controller="Account" asp-action="Logout" class="btn btn-danger text-white">خروج از حساب کاربری</a></li>
+
                         }
                         else
                         {
@@ -44,6 +59,7 @@
                             <li>
                                 <a href="@Url.Action("Login", "Account")">ورود</a>
                             </li>
+
                         }
                     </ul>
                 </div>
@@ -64,6 +80,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/chosen/chosen.jquery.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

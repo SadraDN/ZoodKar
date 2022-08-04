@@ -22,9 +22,9 @@ namespace App.EndPoints.UI.Controllers
             _appUserAppService = appUserAppService;
         }
 
-        public async Task<IActionResult> Index(string? serach)
+        public async Task<IActionResult> Index(string? serach,CancellationToken cancellationToken)
         {
-            var users = await _appUserAppService.GetAll(serach);
+            var users = await _appUserAppService.GetAll(serach,cancellationToken);
             if (users.Count == 0)
             {
                 var adminCroleCreation = await _roleManager.CreateAsync(new IdentityRole<int>("AdminRole"));

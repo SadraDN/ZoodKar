@@ -12,8 +12,10 @@ namespace App.Domain.Core.User.Contracts.AppServices
     {
         Task<AppUserDto>? Get(int id);
         Task<AppUserDto>? Get(string name);
-        Task<List<AppUserDto>> GetAll(string? search);
+        Task<List<AppUserDto>> GetAll(string? search, CancellationToken cancellationToken);
         Task<int>? GetLoggedUserId();
+        Task UpdateUsers(AppUserDto dto);
+        Task UpdateExpertSkills(int expertId, List<int> services, CancellationToken cancellationToken);
         Task<IdentityResult> Create(AppUserDto dto);
         Task Update(AppUserDto dto);
         Task<SignInResult> Login(AppUserDto dto,bool rememberMe);

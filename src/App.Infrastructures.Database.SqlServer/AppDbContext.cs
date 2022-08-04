@@ -44,7 +44,7 @@ namespace App.Infrastructures.Database.SqlServer
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.Bids)
                     .HasForeignKey(d => d.OrderId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_Bids_Orders");
             });
 

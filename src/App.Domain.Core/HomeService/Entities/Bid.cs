@@ -15,6 +15,6 @@ namespace App.Domain.Core.HomeService.Entities
         public DateTime CreatedAt { get; set; }
 
         public virtual Order Order { get; set; } = null!;
-        public virtual AppUser AppUser { get; set; } = null!;
+        public virtual AppUser AppUser { get; set; } 
     }
 }

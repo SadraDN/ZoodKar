@@ -39,7 +39,8 @@ namespace App.Domain.Services.User
 
         public async Task<List<AppUserDto>> GetAll(string? search)
         {
-            return await _appUserRepository.GetAll(search);
+            var users = await _appUserRepository.GetAll(search);
+            return users;
         }
 
         public Task<int>? GetLoggedUserId()
@@ -65,6 +66,16 @@ namespace App.Domain.Services.User
         public async Task Update(AppUserDto dto)
         {
             await _appUserRepository.Update(dto);
+        }
+
+        public async Task UpdateExpertSkills(int expertId, List<int> services, CancellationToken cancellationToken)
+        {
+            await _appUserRepository.UpdateExpertSkills(expertId, services, cancellationToken);
+        }
+
+        public async Task UpdateUsers(AppUserDto dto)
+        {
+            await _appUserRepository.UpdateUsers(dto);
         }
     }
 }

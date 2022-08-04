@@ -1,0 +1,46 @@
+﻿@using App.Domain.Core.HomeService.Dtos
+@model List<ServiceDto>
+
+<h3>لیست سرویس ها</h3>
+<div class="col-6 text-start">
+        <a asp-controller="Service" asp-action="Create"  class="btn btn-success">اضافه کردن خدمات</a>
+    </div>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>شناسه</th>
+            <th>نام سرویس</th>
+            <th>دسته بندی</th>
+            <th>قیمت سرویس</th>
+            <th>توضیحات</th>
+            <th>عکس</th>
+            <th>اعمالات</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var service in Model)
+        {
+            <tr>
+                <td>@service.Id</td>
+                <td>@service.Title</td>
+                <td>@service.CategoryName</td>
+                <td>@service.Price</td>
+                <td>@service.ShortDescription</td>
+                <td>
+                    @if (service.AppFiles.Count>0)
+                    {
+                        <img src="~/img/Service/@service.AppFiles.FirstOrDefault().FileAddress" width="100px">
+                    }
+                    else
+                    {
+                        <img src="~/img/photos/ServicePic.jpeg" width="100px" />
+                    }
+
+                </td>
+                <td>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

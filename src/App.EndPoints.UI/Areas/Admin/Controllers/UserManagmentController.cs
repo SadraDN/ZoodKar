@@ -32,9 +32,9 @@ namespace App.EndPoints.UI.Areas.Admin.Controllers
             _appUserAppService = AppUserAppService;
         }
 
-        public async Task<IActionResult> Index(string? search)
+        public async Task<IActionResult> Index(string? search,CancellationToken cancellationToken)
         {
-            var users = await _appUserAppService.GetAll(search);
+            var users = await _appUserAppService.GetAll(search,cancellationToken);
             var model = users.Select(x => new UserOutputVM
             {
                 Id = x.Id,
