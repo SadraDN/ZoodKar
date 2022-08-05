@@ -32,9 +32,9 @@ namespace App.Domain.Services.HomeServices
             return await _orderRepository.GetAllByCustomerId(customerId, cancellationToken);
         }
 
-        public async Task<List<OrderDto>?> GetAllByExpertId(int expertId, CancellationToken cancellationToken)
+        public async Task<List<OrderDto>?> GetAllByExpertId(AppUserDto expert, CancellationToken cancellationToken)
         {
-            return await _orderRepository.GetAllByExpertId(expertId, cancellationToken);
+            return await _orderRepository.GetAllByExpertId(expert, cancellationToken);
         }
 
         public async Task<List<OrderDto>?> GetAllByOrderId(int orderId, CancellationToken cancellationToken)

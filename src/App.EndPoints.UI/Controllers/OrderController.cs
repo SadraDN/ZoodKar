@@ -123,6 +123,13 @@ namespace App.EndPoints.UI.Controllers
         }
 
         [Authorize(Roles = "ExpertRole")]
+        public async Task<IActionResult> ExpertFinished(CancellationToken cancellationToken)
+        {
+            var expertOrders = await _orderAppService.GetAllByExpertId(cancellationToken);
+            return View(expertOrders);
+        }
+
+        [Authorize(Roles = "ExpertRole")]
         [HttpGet]
         public IActionResult ExpertBid(int orderId)
         {
@@ -147,7 +154,9 @@ namespace App.EndPoints.UI.Controllers
             }
             return View(model);
         }
+
         [Authorize(Roles = "CustomerRole")]
+        [Authorize(Roles = "ExpertRole")]
         [HttpGet]
         public IActionResult Comment(int orderId, int serviceId)
         {

@@ -47,9 +47,12 @@ namespace App.Domain.AppServices.HomeServices
             return _orderService.GetAllByCustomerId(customerId, cancellationToken);
         }
 
-        public Task<List<OrderDto>?> GetAllByExpertId(int expertId, CancellationToken cancellationToken)
+        public async Task<List<OrderDto>?> GetAllByExpertId(CancellationToken cancellationToken)
         {
-            return _orderService.GetAllByExpertId(expertId, cancellationToken);
+            var expert = await _appUserService.GetLoggedUserId();
+            var result = await _appUserService.Get(expert);
+            var orders = await _orderService.GetAllByExpertId(result, cancellationToken);
+            return orders;
         }
 
         public async Task<List<OrderDto>?> GetAllByOrderId(int orderId, CancellationToken cancellationToken)

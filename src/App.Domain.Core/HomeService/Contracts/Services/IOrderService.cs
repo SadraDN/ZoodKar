@@ -12,7 +12,7 @@ namespace App.Domain.Core.HomeService.Contracts.Services
     {
         Task<List<OrderDto>> GetAll(CancellationToken cancellationToken);
         Task<List<OrderDto>?> GetAllByCustomerId(int customerId, CancellationToken cancellationToken);
-        Task<List<OrderDto>?> GetAllByExpertId(int expertId, CancellationToken cancellationToken);
+        Task<List<OrderDto>?> GetAllByExpertId(AppUserDto expert, CancellationToken cancellationToken);
         Task<OrderDto>? GetByOrderId(int orderId, CancellationToken cancellationToken);
         Task<List<OrderDto>?> GetAllByOrderId(int orderId, CancellationToken cancellationToken);
         Task<List<OrderDto>?> GetAllExpertOrders(AppUserDto expert, CancellationToken cancellationToken);

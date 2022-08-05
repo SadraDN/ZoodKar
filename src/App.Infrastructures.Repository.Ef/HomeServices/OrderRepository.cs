@@ -168,22 +168,25 @@ namespace App.Infrastructures.Repository.Ef.HomeServices
             return record;
         }
 
-        public async Task<List<OrderDto>?> GetAllByExpertId(int expertId,CancellationToken cancellationToken)
+        public async Task<List<OrderDto>?> GetAllByExpertId(AppUserDto expert, CancellationToken cancellationToken)
         {
-            var result = await _context.Orders.Where(x => x.FinalExpertUserId == expertId).Select(p => new OrderDto()
+            
+            var result = await _context.Orders.Where(x =>x.FinalExpertUserId == expert.Id && expert.Services.Select(x => x.Id).Contains(x.Service.Id) && x.StatusId == 6 || x.StatusId == 5 || x.StatusId == 4).Select(x => new OrderDto
             {
-                Id = p.Id,
-                ServiceName = p.Service.Title,
-                StatusId = p.StatusId,
-                StatusName = p.Status.Title,
-                CustomerUserId = p.CustomerUserId,
-                FinalExpertUserId = p.FinalExpertUserId,
-                FinalExpertUserName = p.Expert.Name,
-                ServiceBasePrice = p.Service.Price,
-                ServiceDate = p.ServiceDate,
-                CreatedAt = p.CreatedAt,
-                SerivceAddress = p.SerivceAddress,
-                ServiceId = p.ServiceId,
+                Id = x.Id,
+                CreatedAt = x.CreatedAt,
+                CustomerUserId = x.CustomerUserId,
+                CustomerUserName = x.Customer.Name,
+                FinalExpertUserId = x.FinalExpertUserId,
+                FinalExpertUserName = x.Expert.Name,
+                SerivceAddress = x.SerivceAddress,
+                ServiceBasePrice = x.Service.Price,
+                ServiceDate = x.ServiceDate,
+                ServiceName = x.Service.Title,
+                ServiceId = x.Service.Id,
+                StatusId = x.StatusId,
+                StatusName = x.Status.Title,
+
             }).ToListAsync(cancellationToken);
             return result;
         }
@@ -272,7 +275,7 @@ namespace App.Infrastructures.Repository.Ef.HomeServices
         public async Task<List<OrderDto>?> GetAllExpertOrders(AppUserDto expert, CancellationToken cancellationToken)
         {
 
-           var result =await _context.Orders.Where(x => expert.Services.Select(x => x.Id).Contains(x.Service.Id) && x.StatusId == 1 || x.StatusId==2).Select(x=>new OrderDto
+           var result =await _context.Orders.Where(x => expert.Services.Select(x => x.Id).Contains(x.Service.Id) && x.StatusId == 1 || x.StatusId==2 ).Select(x=>new OrderDto
            {
                Id = x.Id,
                CreatedAt = x.CreatedAt,
