@@ -43,7 +43,6 @@ namespace App.Infrastructures.Repository.Ef.User
                 Name = dto.Name,
                 UserName = dto.UserName,
                 Email = dto.Email,
-
             };
             var result = await _userManager.CreateAsync(user, dto.Password);
 
@@ -79,6 +78,7 @@ namespace App.Infrastructures.Repository.Ef.User
                 HomeAddress = x.HomeAddress,
                 IsActive = x.IsActive,
                 PictureFileId = x.PictureFileId,
+                PicUrl = _appDbContext.Files.Where(p=>p.Id == x.PictureFileId).FirstOrDefault().FileAddress,
                 Services = x.ExpertFavoriteServices.Select(e => e.Service).Select(d => new ServiceDto()
                 {
                     Id = d.Id,
@@ -213,7 +213,7 @@ namespace App.Infrastructures.Repository.Ef.User
                 await _userManager.RemovePasswordAsync(user1);
                 await _userManager.AddPasswordAsync(user1, dto.Password);
             }
-
+            user1.PictureFileId = dto.PictureFileId;
             user1.Email = dto.Email;
             user1.Name = dto.Name;
             user1.UserName = dto.UserName;

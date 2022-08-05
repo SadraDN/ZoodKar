@@ -42,9 +42,9 @@ namespace App.Domain.AppServices.HomeServices
             throw new NotImplementedException();
         }
 
-        public Task Set(ServiceCommentDto dto, CancellationToken cancellationToken)
+        public async Task Set(ServiceCommentDto dto, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            await _serviceCommentService.Set(dto, cancellationToken);
         }
 
         public Task Update(ServiceCommentDto dto, CancellationToken cancellationToken)

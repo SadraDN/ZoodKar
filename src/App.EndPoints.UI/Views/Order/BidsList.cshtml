@@ -37,25 +37,30 @@
             {
                 @foreach (var item in order.Bids)
                 {
-                    <tr>
-                        <td>@order.Id</td>
-                        <td>@order.CreatedAt</td>
-                        <td>@order.FinalExpertUserName</td>
-                        <td>@item.SuggestedPrice</td>
-                        <td>@order.StatusName</td>
-                        <td>@order.FinalExpertUserId</td>
-                        <td class="text-success">پشنهاد تایید شد</td>
-                    </tr>
+                    @if (item.IsApproved == true)
+                    {
+                        <tr>
+                            <td>@order.Id</td>
+                            <td>@order.CreatedAt</td>
+                            <td>@order.FinalExpertUserName</td>
+                            <td>@item.SuggestedPrice</td>
+                            <td>@order.StatusName</td>
+                            <td>@order.FinalExpertUserId</td>
+                            <td class="text-success">پشنهاد تایید شد</td>
+                        </tr>
+                        
+                    }
+
                 }
             }
 
-            @if (@order.StatusId == 6)
-            {
-                <div class="form-floating">
-                    <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea"></textarea>
-                    <label for="floatingTextarea">Comments</label>
-                </div>
-            }
+            <tr>
+                @if (@order.StatusId == 6)
+                {
+                    <td><a asp-controller="Order" asp-action="Comment" asp-route-orderId="@order.Id" asp-route-serviceId="@order.ServiceId" class="btn btn-info">ثبت نظر</a></td>
+                }
+            </tr>
+
 
 
 

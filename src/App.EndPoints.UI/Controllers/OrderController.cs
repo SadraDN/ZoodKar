@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using ServiceDto = App.Domain.Core.HomeService.Dtos.ServiceDto;
 
 namespace App.EndPoints.UI.Controllers
 {
@@ -19,12 +20,14 @@ namespace App.EndPoints.UI.Controllers
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IAppUserAppService _appUserAppService;
         private readonly IBidAppService _bidAppService;
+        private readonly IServiceCommentAppService _commentAppService;
         public OrderController(IOrderAppService OrderAppService
             , IServiceAppService ServiceAppService
              , ICategoryAppService CategoryAppService
             , IHttpContextAccessor HttpContextAccessor
             , IAppUserAppService AppUserAppService
-            , IBidAppService BidAppService)
+            , IBidAppService BidAppService, 
+            IServiceCommentAppService commentAppService)
         {
             _orderAppService = OrderAppService;
             _serviceAppService = ServiceAppService;
@@ -32,6 +35,7 @@ namespace App.EndPoints.UI.Controllers
             _httpContextAccessor = HttpContextAccessor;
             _appUserAppService = AppUserAppService;
             _bidAppService = BidAppService;
+            _commentAppService = commentAppService;
         }
         public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
@@ -48,7 +52,7 @@ namespace App.EndPoints.UI.Controllers
         public async Task<IActionResult> ServiceList(int categoryId, CancellationToken cancellationToken)
         {
             var record = await _serviceAppService.GetAll(cancellationToken);
-            var services = record.Where(c => c.CategoryId == categoryId).Select(c => new ServiceVM
+            var services = record.Where(c => c.CategoryId == categoryId).Select(c => new ServiceDto
             {
                 CategoryName = c.CategoryName,
                 Title = c.Title,
@@ -56,6 +60,7 @@ namespace App.EndPoints.UI.Controllers
                 Price = c.Price,
                 Id = c.Id,
                 ShortDescription = c.ShortDescription,
+                AppFiles = c.AppFiles,
             }).ToList();
             return View(services);
         }
@@ -141,6 +146,30 @@ namespace App.EndPoints.UI.Controllers
                 return RedirectToAction("ExpertRequest");
             }
             return View(model);
+        }
+        [Authorize(Roles = "CustomerRole")]
+        [HttpGet]
+        public IActionResult Comment(int orderId, int serviceId)
+        {
+            ViewBag.OrderId = orderId;
+            ViewBag.ServiceId = serviceId;
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Comment(ServiceCommentDto model,int orderId,int serviceId,CancellationToken cancellationToken)
+        {
+            var loggedUser = await _appUserAppService.GetLoggedUserId();
+            var comment = new ServiceCommentDto()
+            {
+                CreatedAt = DateTime.Now,
+                CommentText = model.CommentText,
+                CreatedUserId = loggedUser,
+                OrderId = orderId,
+                ServiceId = serviceId
+            };
+            await _commentAppService.Set(comment, cancellationToken);
+            return RedirectToAction("OrdersList");
         }
     }
 }

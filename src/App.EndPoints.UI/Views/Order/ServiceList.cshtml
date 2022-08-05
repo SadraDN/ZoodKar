@@ -1,11 +1,23 @@
-﻿@using App.EndPoints.UI.Models.Order
-@model List<ServiceVM>
+﻿@using App.Domain.Core.HomeService.Dtos
+
+@model List<ServiceDto>
 
 @foreach(var service in Model)
 {
     <div class="card" style="width: 18rem;">
   <div class="card-body">
-      <img class="card-img-top" src="~/img/photos/ServicePic.jpeg" alt="Card image cap">
+      @if (service.AppFiles.Count > 0)
+        {
+            @foreach (var image in service.AppFiles)
+            {
+                    <img class="card-img-top" src="~/img/Service/@image.FileAddress" width="300px" />
+            }
+        }
+        else
+        {
+            <img class="card-img-top" src="~/img/photos/ServicePic.jpeg" width="300px" />
+        }
+
     <h5 class="card-title">@service.Title</h5>
     <p class="card-text">@service.ShortDescription</p>
     <p class="card-text"> <strong>قیمت پایه @service.Price هزارتومان </strong></p>

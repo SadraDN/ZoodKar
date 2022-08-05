@@ -118,7 +118,7 @@ namespace App.EndPoints.UI.Areas.Admin.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Edit(UserUpdateVM model)
+        public async Task<IActionResult> Edit(UserUpdateVM model,IFormFile profile,CancellationToken cancellationToken)
         {
             var user = new AppUserDto
             {
@@ -129,7 +129,7 @@ namespace App.EndPoints.UI.Areas.Admin.Controllers
                 Email = model.Email,
                 Roles = model.Roles,
             };
-            await _appUserAppService.Update(user);
+            await _appUserAppService.Update(user,profile,cancellationToken);
 
             return RedirectToAction("Index");
         }

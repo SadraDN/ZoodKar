@@ -6,8 +6,22 @@
 
 <h3>ویرایش اطلاعات</h3>
 
-<form asp-controller="Account" asp-action="Edit" method="post">
+<form asp-controller="Account" asp-action="Edit" method="post" enctype="multipart/form-data">
     <input style="display:none" name="expertId" value="@ViewBag.UserId" />
+
+    @if (Model.PicUrl!=null)
+        {
+            
+                <div class="col-4">
+                    <img src="~/img/Profile/@Model.PicUrl" width="300px" class="img-thumbnail" />
+                </div>
+        }
+        else
+        {
+            <div class="col-4">
+                    <img src="~/img/photos/Nopic.jpg" width="300px" class="img-thumbnail" />
+                </div>
+        }
     <div class="form-group mb-3">
         <label asp-for="UserName"></label>
         <input asp-for="UserName" class="form-control" readonly/>
@@ -30,6 +44,14 @@
         <input asp-for="Password" class="form-control" />
         <span asp-validation-for="Password"></span>
     </div>
+    <div class="form-group mb-3">
+                    <div class="col-4">
+                        <label for="image">عکس سفارش</label>
+                    </div>
+                    <div class="col-8">
+                        <input type="file" id="image" class="form-control" name="profile"  />
+                    </div>
+                </div>
     @if (User.IsInRole("ExpertRole"))
     {
         <div class="form-group mb-3">

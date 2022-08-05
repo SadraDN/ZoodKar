@@ -1,0 +1,13 @@
+﻿@using App.Domain.Core.HomeService.Dtos
+@model ServiceCommentDto
+
+<form method="post" asp-controller="Order" asp-action="Comment">
+    <div class="form-floating">
+        <textarea asp-for="CommentText" class="form-control" placeholder=" نظر خود را درمورد سفارش با ما درمیان بگذارید" id="floatingTextarea"></textarea>
+        <label for="floatingTextarea">Comments</label>
+    </div>
+    <button type="submit" asp-route-orderId="@ViewBag.OrderId" asp-route-serviceId="@ViewBag.ServiceId" class="btn btn-primary mx-1">ثبت نظر</button>
+    <div>
+        <a asp-controller="Order" asp-action="Index"  class="btn btn-success">بازگشت</a>
+    </div>
+</form>

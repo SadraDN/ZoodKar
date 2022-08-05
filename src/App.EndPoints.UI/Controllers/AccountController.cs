@@ -111,7 +111,7 @@ namespace App.EndPoints.UI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(AppUserDto model)
+        public async Task<IActionResult> Edit(AppUserDto model,IFormFile profile,CancellationToken cancellationToken)
         {
             var loggedUser = await _appUserAppService.GetLoggedUserId();
             var user = new AppUserDto
@@ -121,8 +121,9 @@ namespace App.EndPoints.UI.Controllers
                 Name = model.Name,
                 Password = model.Password,
                 Email = model.Email,
+                PicUrl = model.PicUrl,
             };
-            await _appUserAppService.UpdateUsers(user);
+            await _appUserAppService.UpdateUsers(user,profile,cancellationToken );
 
             return RedirectToAction("Index", "Home");
         }
