@@ -17,7 +17,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.AddSeq(builder.Configuration.GetSection("Seq"));
 
 builder.Services.ConfigureApplicationCookie(options =>{
     options.LoginPath = "/Account/Login";

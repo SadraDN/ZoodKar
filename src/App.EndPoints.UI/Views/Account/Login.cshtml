@@ -6,7 +6,7 @@
     ViewData["Title"] = "ورود";
 }
 
-<div class="m-5 p-5">
+<div class="m-0 p-0">
     <form asp-controller="Account" asp-action="Login" method="post">
     
         <h4>ورود به حساب کاربری</h4>
@@ -26,9 +26,9 @@
         </div>
 
 
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox"  id="flexCheckDefault" asp-for="RememberMe">
-            <label class="form-check-label" for="flexCheckDefault" asp-for="RememberMe">
+        <div class="form-check p-2 m-2">
+            <input class="form-check-input" type="checkbox" asp-for="RememberMe">
+            <label class="form-check-label mr-4"  asp-for="RememberMe">
             </label>
             <span asp-validation-for="RememberMe" class="text-danger"></span>
 

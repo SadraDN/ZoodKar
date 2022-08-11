@@ -1,7 +1,8 @@
 ﻿@using App.Domain.Core.HomeService.Dtos
+@using App.EndPoints.UI.ExtensionMethods
 @model List<OrderDto>
 <h3>لیست سفارشات</h3>
-<table class="table table-striped table-dark">
+<table class="table table-striped table-light">
     <thead>
         <tr>
             <th>شماره سفارش</th>
@@ -22,12 +23,12 @@
         {
             <tr>
                 <td>@order.Id</td>
-                <td>@order.CreatedAt</td>
+                <td>@PersianDateString.ToPersianDate(@order.CreatedAt)</td>
                 <td>@order.ServiceName</td>
                 <td>@order.FinalExpertUserName</td>
                 <td>@order.ServiceBasePrice</td>
                 <td>@order.SerivceAddress</td>
-                <td>@order.ServiceDate</td>
+                <td>@PersianDateString.ToPersianDate(order.ServiceDate)</td>
                 <td>@order.StatusName</td>
                 <td>
                      <a asp-controller="Order" asp-action="BidsList" asp-route-orderId="@order.Id"  asp-route-customerUserId="@order.CustomerUserId" class="btn btn-primary">مشاهده پیشنهادات</a>

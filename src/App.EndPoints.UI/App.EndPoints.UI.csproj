@@ -26,11 +26,13 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.7" />
+		<PackageReference Include="Seq.Extensions.Logging" Version="6.1.0" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <Folder Include="Areas\Admin\Data\" />
 	  <Folder Include="Areas\Admin\Views\Category\" />
+	  <Folder Include="wwwroot\assets\images\menu-main\card\" />
 	  <Folder Include="wwwroot\img\Profile\" />
 	  <Folder Include="wwwroot\img\Order\" />
 	</ItemGroup>

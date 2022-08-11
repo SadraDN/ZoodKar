@@ -1,21 +1,21 @@
 ﻿@using App.Domain.Core.HomeService.Dtos
 
 @model List<ServiceDto>
-
+<div class="row" >
 @foreach(var service in Model)
 {
-    <div class="card" style="width: 18rem;">
+    <div class="card col-3" style="width: 18rem;">
   <div class="card-body">
       @if (service.AppFiles.Count > 0)
         {
             @foreach (var image in service.AppFiles)
             {
-                    <img class="card-img-top" src="~/img/Service/@image.FileAddress" width="300px" />
+                    <img class="card-img-top" src="~/img/Service/@image.FileAddress" width="200px" height="250px" />
             }
         }
         else
         {
-            <img class="card-img-top" src="~/img/photos/ServicePic.jpeg" width="300px" />
+            <img class="card-img-top" src="~/img/photos/ServicePic.jpeg" width="200px" height="250px" />
         }
 
     <h5 class="card-title">@service.Title</h5>
@@ -25,3 +25,4 @@
   </div>
 </div>
 }
+</div>

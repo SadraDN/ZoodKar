@@ -155,10 +155,10 @@ namespace App.EndPoints.UI.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "CustomerRole")]
-        [Authorize(Roles = "ExpertRole")]
+        [Authorize(Roles = "CustomerRole,ExpertRole")]
+
         [HttpGet]
-        public IActionResult Comment(int orderId, int serviceId)
+        public async Task<IActionResult> Comment(int orderId, int serviceId)
         {
             ViewBag.OrderId = orderId;
             ViewBag.ServiceId = serviceId;

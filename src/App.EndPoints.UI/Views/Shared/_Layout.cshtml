@@ -1,72 +1,298 @@
 ﻿<!DOCTYPE html>
 <html lang="fa" dir="rtl">
+
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - زودکار</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/App.EndPoints.UI.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/chosen/chosen.min.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>زود کار | @ViewData["Title"]</title>
+    <!-- font---------------------------------------->
+    <link rel="stylesheet" href="~/assets/css/vendor/font-awesome.min.css">
+    <link rel="stylesheet" href="~/assets/css/vendor/materialdesignicons.css">
+    <!-- plugin-------------------------------------->
+    <link rel="stylesheet" href="~/assets/css/vendor/bootstrap.css">
+    <link rel="stylesheet" href="~/assets/css/vendor/owl.carousel.min.css">
+    <link rel="stylesheet" href="~/assets/css/vendor/nice-select.css">
+    <link rel="stylesheet" href="~/assets/css/vendor/jquery.jqZoom.css">
+    <link rel="stylesheet" href="~/assets/css/vendor/sweetalert2.min.css">
+    <!-- main-style---------------------------------->
+    <link rel="stylesheet" href="~/assets/css/main.css">
+    <link rel="stylesheet" href="~/assets/css/responsive.css">
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">زودکار</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">صفحه اصلی</a>
+    <header class="header-main">
+        <div class="container-main">
+            <div class="d-block">
+                <section class="h-main-row">
+                    <div class="col-lg-9 col-md-12 col-xs-12 pr">
+                        <div class="header-right">
+                            <div class="col-lg-3 pr">
+                                <div class="header-logo row text-right">
+                                    <a href="#">
+                                        <img src="~/assets/images/zoodkarLogo.png" width="120px" alt="زودکار" >
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-0 col-xs-12 pl">
+                        <div class="header-left">
+                            <div class="header-account text-left">
+                                <div class="d-block">
+                                    <div class="account-box">
+                                        <div class="nav-account d-block pl">
+                                            <span class="icon-account">
+                                                <img src="~/assets/images/man.png" class="avator">
+                                            </span>
+                                            <span class="title-account">@(User.Identity.IsAuthenticated?User.Identity.Name:"حساب کاربری")</span>
+                                            <div class="dropdown-menu">
+                                                <ul class="account-uls mb-0">
+                                                    @if (User.Identity.IsAuthenticated)
+                                                    {
+                                                        <li class="account-item">
+                                                            <a asp-controller="Account" asp-action="Edit" class="account-link">حساب کاربری</a>
+                                                        </li>
+                                                        @if (User.IsInRole("CustomerRole"))
+                                                        {
+                                                            <li class="account-item">
+                                                                <a asp-controller="Order" asp-action="OrdersList" class="account-link">سفارشات من</a>
+                                                            </li>
+                                                        }
+                                                        @if (User.IsInRole("ExpertRole"))
+                                                        {
+                                                            <li class="account-item">
+                                                                <a asp-controller="Order" asp-action="ExpertRequest" class="account-link">درخواست ها</a>
+                                                            </li>
+                                                            <li class="account-item">
+                                                                <a asp-controller="Order" asp-action="ExpertFinished" class="account-link">سفارشات انجام شده</a>
+                                                            </li>
+                                                        }
+
+                                                        <li class="account-item">
+                                                            <a asp-controller="Account" asp-action="Logout" class="account-link">خروج</a>
+                                                        </li>
+                                                    }
+                                                    else
+                                                    {
+                                                        <li class="account-item">
+                                                            <a asp-controller="Account" asp-action="Login" class="account-link">ورود</a>
+                                                        </li>
+                                                        <li class="account-item">
+                                                            <a asp-controller="Account" asp-action="Register" class="account-link">ثبت نام</a>
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <nav class="header-main-nav">
+                    <div class="d-block">
+                        <div class="align-items-center">
+                            <ul class="menu-ul mega-menu-level-one">
+                                <li id="nav-menu-item" class="menu-item nav-overlay">
+                                    <a href="#" class="current-link-menu">
+                                        دسته بندی خدمات
+                                    </a>
+                                    <ul class="sub-menu is-mega-menu mega-menu-level-two">
+                                        <li class="menu-mega-item menu-item-type-mega-menu">
+                                            @await Component.InvokeAsync("NavigationMenu")
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+                <!--    responsive-megamenu-mobile----------------->
+                <nav class="sidebar">
+                    <div class="nav-header">
+                        <div class="header-cover"></div>
+                        <div class="logo-wrap">
+                            <a class="logo-icon" href="#">
+                                <img alt="logo-icon" src="~/assets/images/logo.png"
+                                     width="40">
+                            </a>
+                        </div>
+                    </div>
+                    <ul class="nav-categories ul-base">
+                        <li>
+                            <a href="#" class="collapsed" type="button" data-toggle="collapse"
+                               data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                <i class="mdi mdi-chevron-down"></i>کالای دیجیتال
+                            </a>
+                            <div id="collapseOne" class="collapse" aria-labelledby="headingOne"
+                                 data-parent="#accordionExample" style="">
+                                <ul>
+                                    <li class="has-sub">
+                                        <a href="#" class="category-level-2">لوازم جانبی گوشی</a>
+                                        <ul>
+                                            <li><a href="#" class="category-level-3">کیف و کاور گوشی</a></li>
+                                            <li><a href="#" class="category-level-3">پاور بانک(شارژر همراه)</a></li>
+                                            <li><a href="#" class="category-level-3">پایه نگهدارنده گوشی</a></li>
+                                            <li><a href="#" class="category-level-3">همه موارد این دسته</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="has-sub">
+                                        <a href="#" class="category-level-2">گوشی موبایل</a>
+                                        <ul>
+                                            <li><a href="#" class="category-level-3">سامسونگ</a></li>
+                                            <li><a href="#" class="category-level-3">هوآوی</a></li>
+                                            <li><a href="#" class="category-level-3">اپل</a></li>
+                                            <li><a href="#" class="category-level-3">شیائومی</a></li>
+                                            <li><a href="#" class="category-level-3">آنر</a></li>
+                                            <li><a href="#" class="category-level-3">نوکیا</a></li>
+                                            <li><a href="#" class="category-level-3">همه موارد این دسته</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="has-sub">
+                                        <a href="#" class="category-level-2">دوربین</a>
+                                        <ul>
+                                            <li><a href="#" class="category-level-3">دوربین عکاسی دیجیتال</a></li>
+                                            <li><a href="#" class="category-level-3">دوربین ورزشی و فیلم برداری</a></li>
+                                            <li><a href="#" class="category-level-3">دوربین چاپ سریع</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">حریم خصوصی</a>
+                        <li>
+                            <a href="#" class="collapsed" type="button" data-toggle="collapse"
+                               data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                <i class="mdi mdi-chevron-down"></i>آرایشی و بهداشتی
+                            </a>
+                            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
+                                 data-parent="#accordionExample" style="">
+                                <ul>
+                                    <li class="has-sub">
+                                        <a href="#" class="category-level-2">لوازم جانبی گوشی</a>
+                                        <ul>
+                                            <li><a href="#" class="category-level-3">کیف و کاور گوشی</a></li>
+                                            <li><a href="#" class="category-level-3">پاور بانک(شارژر همراه)</a></li>
+                                            <li><a href="#" class="category-level-3">پایه نگهدارنده گوشی</a></li>
+                                            <li><a href="#" class="category-level-3">همه موارد این دسته</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="has-sub">
+                                        <a href="#" class="category-level-2">گوشی موبایل</a>
+                                        <ul>
+                                            <li><a href="#" class="category-level-3">سامسونگ</a></li>
+                                            <li><a href="#" class="category-level-3">هوآوی</a></li>
+                                            <li><a href="#" class="category-level-3">اپل</a></li>
+                                            <li><a href="#" class="category-level-3">شیائومی</a></li>
+                                            <li><a href="#" class="category-level-3">آنر</a></li>
+                                            <li><a href="#" class="category-level-3">نوکیا</a></li>
+                                            <li><a href="#" class="category-level-3">همه موارد این دسته</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="has-sub">
+                                        <a href="#" class="category-level-2">دوربین</a>
+                                        <ul>
+                                            <li><a href="#" class="category-level-3">دوربین عکاسی دیجیتال</a></li>
+                                            <li><a href="#" class="category-level-3">دوربین ورزشی و فیلم برداری</a></li>
+                                            <li><a href="#" class="category-level-3">دوربین چاپ سریع</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="Index">سفارش سرویس</a>
+                        <li><a href="#">ابزار و اداری</a></li>
+                        <li><a href="#">مد و پوشاک</a></li>
+                        <li>
+                            <a href="#" class="collapsed" type="button" data-toggle="collapse"
+                               data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                <i class="mdi mdi-chevron-down"></i>خانه و آشپزخانه
+                            </a>
+                            <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
+                                 data-parent="#accordionExample" style="">
+                                <ul>
+                                    <li class="has-sub">
+                                        <a href="#" class="category-level-2">لوازم جانبی گوشی</a>
+                                        <ul>
+                                            <li><a href="#" class="category-level-3">کیف و کاور گوشی</a></li>
+                                            <li><a href="#" class="category-level-3">پاور بانک(شارژر همراه)</a></li>
+                                            <li><a href="#" class="category-level-3">پایه نگهدارنده گوشی</a></li>
+                                            <li><a href="#" class="category-level-3">همه موارد این دسته</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="has-sub">
+                                        <a href="#" class="category-level-2">گوشی موبایل</a>
+                                        <ul>
+                                            <li><a href="#" class="category-level-3">سامسونگ</a></li>
+                                            <li><a href="#" class="category-level-3">هوآوی</a></li>
+                                            <li><a href="#" class="category-level-3">اپل</a></li>
+                                            <li><a href="#" class="category-level-3">شیائومی</a></li>
+                                            <li><a href="#" class="category-level-3">آنر</a></li>
+                                            <li><a href="#" class="category-level-3">نوکیا</a></li>
+                                            <li><a href="#" class="category-level-3">همه موارد این دسته</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="has-sub">
+                                        <a href="#" class="category-level-2">دوربین</a>
+                                        <ul>
+                                            <li><a href="#" class="category-level-3">دوربین عکاسی دیجیتال</a></li>
+                                            <li><a href="#" class="category-level-3">دوربین ورزشی و فیلم برداری</a></li>
+                                            <li><a href="#" class="category-level-3">دوربین چاپ سریع</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
                         </li>
-                        @if (User.IsInRole("ExpertRole"))
-                        {
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="ExpertRequest"> درخواست ها</a>
-                        </li>
-                        }
-                         @if (User.IsInRole("CustomerRole"))
-                        {
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="OrdersList"> سفارشات</a>
-                        </li>
-                        }
+                        <li><a href="#">لوازم تحریر و هنر</a></li>
+                        <li><a href="#">کودک و نوزاد</a></li>
                     </ul>
-
-                    <ul>
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            <li class="mb-3"><p>@User.Identity.Name</p></li>
-                            <li><a asp-controller="Account" asp-action="Edit" class="btn btn-info text-white">ویرایش اطلاعات</a></li>
-                            <li><a asp-controller="Account" asp-action="Logout" class="btn btn-danger text-white">خروج از حساب کاربری</a></li>
-
-                        }
-                        else
-                        {
-                            <li>
-                                <a href="@Url.Action("Register", "Account")">ثبت نام</a>
-                            </li>
-                            <li>
-                                <a href="@Url.Action("Login", "Account")">ورود</a>
-                            </li>
-
-                        }
+                </nav>
+                <div class="nav-btn nav-slider">
+                    <span class="linee1"></span>
+                    <span class="linee2"></span>
+                    <span class="linee3"></span>
+                </div>
+                <div class="overlay"></div>
+                <!-- bottom-menu-joomy -->
+                <div class="bottom-menu-joomy">
+                    <ul class="mb-0">
+                        <li>
+                            <a href="home-1.html">
+                                <i class="fa fa-home"></i>
+                                صفحه اصلی
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <div class="nav-btn nav-slider">
+                                    <i class="fa fa-bars" aria-hidden="true"></i>
+                                </div>
+                                دسته بندی ها
+                            </a>
+                        </li>
+                        <li>
+                            <a href="cart.html">
+                                <i class="fa fa-shopping-cart"></i>
+                                سبد خرید
+                                <div class="shopping-bag-item">2</div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#exampleModalCenter">
+                                <i class="fa fa-search"></i>
+                                جستجو
+                            </a>
+                        </li>
+                        <li>
+                            <a href="login.html">
+                                <i class="fa fa-user"></i>
+                                حساب کاربری
+                            </a>
+                        </li>
                     </ul>
                 </div>
+                <!--    responsive-megamenu-mobile----------------->
             </div>
-        </nav>
+        </div>
     </header>
-    <div class="container-fluid">
+    <div class="container-fluid mt-0">
         <main role="main" class="pb-1">
             @RenderBody()
         </main>
@@ -74,12 +300,22 @@
 
     <footer class="border-top footer text-muted" style="direction: ltr">
         <div class="container">
-            &copy; 2022 - ZoodKar - <a asp-area="" asp-controller="Home" asp-action="Privacy">حریم خصوصی</a>
+            &copy; 1401 - ZoodKar - <a asp-area="" asp-controller="Home" asp-action="Privacy">حریم خصوصی</a>
         </div>
     </footer>
+    <!-- file js---------------------------------------------------->
+    <script src="~/assets/js/vendor/jquery-3.2.1.min.js"></script>
+    <script src="~/assets/js/vendor/bootstrap.js"></script>
+    <!-- plugin----------------------------------------------------->
+    <script src="~/assets/js/vendor/owl.carousel.min.js"></script>
+    <script src="~/assets/js/vendor/jquery.countdown.js"></script>
+    <script src="~/assets/js/vendor/ResizeSensor.min.js"></script>
+    <script src="~/assets/js/vendor/theia-sticky-sidebar.min.js"></script>
+    <script src="~/assets/js/vendor/wNumb.js"></script>
+    <script src="~/assets/js/vendor/nouislider.min.js"></script>
+    <!-- main js---------------------------------------------------->
+    <script src="~/assets/js/main.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/chosen/chosen.jquery.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

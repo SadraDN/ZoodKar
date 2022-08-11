@@ -23,7 +23,7 @@ namespace App.EndPoints.UI.Controllers
         }
 
         [AllowAnonymous]
-        public async Task<IActionResult> Login(string returnurl)
+        public async Task<IActionResult> Login(string? returnurl)
         {
             ViewBag.ReturnUrl = returnurl;
             await _appUserAppService.SignOutUser();

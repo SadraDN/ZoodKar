@@ -17,5 +17,6 @@
         public DateTime CreatedAt { get; set; }
         public List<AppFileDto>? AppFiles { get; set; } = new List<AppFileDto>();
         public List<BidDto>? Bids { get; set; } = new List<BidDto>();
+        public List<ServiceCommentDto>? ServiceComments { get; set; } = new List<ServiceCommentDto>();
     }
 }

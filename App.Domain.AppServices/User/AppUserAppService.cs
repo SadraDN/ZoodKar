@@ -129,7 +129,7 @@ namespace App.Domain.AppServices.User
                 if (user.PictureFileId != null)
                 {
                     AppFileDto fileload = await _appFileService.Get((int)user.PictureFileId, cancellationToken);
-                    var deleteFile = uploadpath + user.PicUrl;
+                    var deleteFile = Path.Combine(uploadpath,user.PicUrl);
                     File.Delete(deleteFile);
                     await _appFileService.Delete(fileload.Id, cancellationToken);
                 }
@@ -140,10 +140,7 @@ namespace App.Domain.AppServices.User
                     FileAddress = uploadProfile,
                     EntityId = 2
                 }, cancellationToken);
-                var oFile = await _appFileService.Get(fileId, cancellationToken);
-                dto.AppFiles.Add(oFile);
                 dto.PictureFileId = fileId;
-                dto.PicUrl=uploadProfile;
             }
             await _appUserService.UpdateUsers(dto);
         }
