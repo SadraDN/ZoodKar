@@ -6,6 +6,7 @@
         public string Name { set; get; }
         public string UserName { set; get; }
         public string Email { set; get; }
+        public string PicUrl { get; set; }
         public List<string?> Roles { set; get; }
     }
 }

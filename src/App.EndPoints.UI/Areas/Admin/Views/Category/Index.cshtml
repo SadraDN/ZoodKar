@@ -1,0 +1,26 @@
+﻿@using App.Domain.Core.HomeService.Dtos
+@model List<CategoryDto>
+
+<h3>لیست سرویس ها</h3>
+<div class="col-6 text-start">
+        <a asp-controller="Category" asp-action="Create"  class="btn btn-success">اضافه کردن دسته بندی</a>
+    </div>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>شناسه</th>
+            <th>نام </th>
+            <th>اعمالات</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var category in Model)
+        {
+            <tr>
+                <td>@category.Id</td>
+                <td>@category.Title</td>
+            </tr>
+        }
+    </tbody>
+</table>

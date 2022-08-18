@@ -25,9 +25,9 @@ namespace App.Domain.AppServices.HomeServices
             await _bidService.Approve(expertFinalId, orderId, bidId, cancellationToken);
         }
 
-        public Task Delete(int id, CancellationToken cancellationToken)
+        public async Task Delete(int id, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+           await _bidService.Delete(id, cancellationToken);
         }
 
         public async Task<List<BidDto>> GetAll(CancellationToken cancellationToken)

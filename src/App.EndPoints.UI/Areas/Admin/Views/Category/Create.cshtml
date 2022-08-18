@@ -1,0 +1,35 @@
+﻿@using App.Domain.Core.HomeService.Dtos
+@model CategoryDto
+<form method="post" asp-controller="Category" asp-action="Create" >
+
+    <div class="border p-3">
+        <div class="form-group row">
+            <h2 class="text-info pl-3">اضافه کردن دسته بندی</h2>
+        </div>
+
+        <div class="row">
+            <div class="col-8">
+
+                <div class="form-group row p-3">
+                    <div class="col-4">
+                        <label asp-for="Title"></label>
+                    </div>
+                    <div class="col-8">
+                        <input type="text" asp-for="Title" class="form-control" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="d-inline-flex justify-content-around">
+                        <button type="submit"  class="btn btn-primary mx-1">ثبت </button>
+                        <div>
+                            <a asp-controller="Category" asp-action="Index"  class="btn btn-success">بازگشت</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>

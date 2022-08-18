@@ -54,16 +54,6 @@
                 }
             }
 
-            <tr>
-                @if (@order.StatusId == 6)
-                {
-                    <td><a asp-controller="Order" asp-action="Comment" asp-route-orderId="@order.Id" asp-route-serviceId="@order.ServiceId" class="btn btn-info">ثبت نظر</a></td>
-                }
-            </tr>
-
-
-
-
         }
     </tbody>
 </table>

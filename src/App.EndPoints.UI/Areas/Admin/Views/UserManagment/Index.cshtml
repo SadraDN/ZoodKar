@@ -22,19 +22,20 @@
 
 <table class="table table-striped">
     <thead>
-        <tr>
+        <tr class="align-items-center">
             <th>شناسه</th>
             <th>نام و نام خانوادگی</th>
             <th>نام کاربری</th>
             <th>ایمیل</th>
             <th>نقش</th>
-            <th></th>
+            <th>عکس پروفایل</th>
+            <th>اعمالات</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var user in Model)
         {
-            <tr>
+            <tr class="align-items-center">
                 <th>@user.Id</th>
                 <th>@user.Name</th>
                 <td>@user.UserName</td>
@@ -49,6 +50,16 @@
                         }
                         <span>@rol / </span>
 
+                    }
+                </td>
+                <td>
+                    @if (user.PicUrl != null)
+                    {
+                        <img src="~/img/Profile/@user.PicUrl" width="100px" height="100px" class="img-thumbnail" />
+                    }
+                    else
+                    {
+                        <img src="~/img/photos/Nopic.jpg" width="100px" height="100px" class="img-thumbnail" />
                     }
                 </td>
                 <td>

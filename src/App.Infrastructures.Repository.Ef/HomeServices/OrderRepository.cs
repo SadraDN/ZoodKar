@@ -32,7 +32,14 @@ namespace App.Infrastructures.Repository.Ef.HomeServices
                 ServiceDate = dto.ServiceDate,
                 SerivceAddress = dto.SerivceAddress,
             };
-
+            if (record.Id != 0)
+            {
+                _logger.LogInformation("New {Method} added succesfully", "Order");
+            }
+            else
+            {
+                _logger.LogWarning("Add new {Method} failed", "Order");
+            }
             await _context.AddAsync(record, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
             foreach (var file in dto.AppFiles)
@@ -45,8 +52,17 @@ namespace App.Infrastructures.Repository.Ef.HomeServices
                     CreatedAt = DateTime.Now,
                 };
                 record.OrderFiles.Add(orderFiles);
+                if (file.Id != 0)
+                {
+                    _logger.LogInformation("{Method} File added succesfully", "Order");
+                }
+                else
+                {
+                    _logger.LogWarning("Add new file for {Method} failed", "Order");
+                }
             }
             await _context.SaveChangesAsync(cancellationToken);
+
         }
 
         public async Task Update(OrderDto dto, CancellationToken cancellationToken)
@@ -71,19 +87,23 @@ namespace App.Infrastructures.Repository.Ef.HomeServices
 
             //record.OrderFiles = orderFiles;
             await _context.SaveChangesAsync(cancellationToken);
+            _logger.LogInformation("{Method} updated succesfully", "Order");
         }
 
         public async Task Delete(int id, CancellationToken cancellationToken)
         {
             var record = await _context.Orders.Where(p => p.Id == id).SingleAsync(cancellationToken);
+            if (record == null)
+            {
+                _logger.LogWarning("No {Method} found by Id {Id} to delete", "Order", id);
+            }
             _context.Remove(record!);
+            _logger.LogInformation("{Method} deleted succesfully", "Order");
             await _context.SaveChangesAsync(cancellationToken);
         }
 
         public async Task<List<OrderDto>> GetAll(CancellationToken cancellationToken)
         {
-            _logger.LogInformation("admin call {methodname} method", "GetAll");
-            _logger.LogTrace("start trace method : {methodname}", "GetAll");
             var orders = await _context.Orders.Select(p => new OrderDto()
             {
                 Id = p.Id,
@@ -120,11 +140,14 @@ namespace App.Infrastructures.Repository.Ef.HomeServices
                 }).ToList(),
                 
             }).ToListAsync(cancellationToken);
-            if (orders == null)
+            if (orders != null)
             {
-                _logger.LogWarning("no record availble in {methodname}", "GetAll");
+                _logger.LogInformation("All {Method} get succesfully ", "Orders");
             }
-            _logger.LogTrace("start trace method : {methodname}", "GetAll");
+            else
+            {
+                _logger.LogWarning("Get All {Method} failed", "Orders");
+            }
             return orders;
         }
 
@@ -164,7 +187,24 @@ namespace App.Infrastructures.Repository.Ef.HomeServices
                     SuggestedPrice = b.SuggestedPrice,
 
                 }).ToList(),
+                ServiceComments = p.ServiceComments.Select(x => new ServiceCommentDto()
+                {
+                    CommentText = x.CommentText,
+                    CreatedAt = x.CreatedAt,
+                    CreatedUserId =x.CreatedUserId,
+                    Id = x.Id,
+                    OrderId = x.OrderId,
+                    ServiceId = x.ServiceId,
+                }).ToList()
             }).ToListAsync(cancellationToken);
+            if (record != null)
+            {
+                _logger.LogInformation("{Method} By CustomerId {id} get succesfully", "Order", customerId);
+            }
+            else
+            {
+                _logger.LogWarning("{Method} By CustomerID {id} not found", "Order", customerId);
+            }
             return record;
         }
 
@@ -186,8 +226,25 @@ namespace App.Infrastructures.Repository.Ef.HomeServices
                 ServiceId = x.Service.Id,
                 StatusId = x.StatusId,
                 StatusName = x.Status.Title,
+                ServiceComments = x.ServiceComments.Select(x => new ServiceCommentDto
+                {
+                    CommentText = x.CommentText,
+                    CreatedAt = x.CreatedAt,
+                    CreatedUserId = x.CreatedUserId,
+                    Id = x.Id,
+                    OrderId = x.OrderId,
+                    ServiceId = x.ServiceId
+                }).ToList(),
 
             }).ToListAsync(cancellationToken);
+            if (result != null)
+            {
+                _logger.LogInformation("{Method} By CustomerId {id} get succesfully", "Order", expert);
+            }
+            else
+            {
+                _logger.LogWarning("{Method} By CustomerId {id} not found", "Order", expert);
+            }
             return result;
         }
 
@@ -229,6 +286,14 @@ namespace App.Infrastructures.Repository.Ef.HomeServices
 
                 }).ToList(),
             }).SingleOrDefaultAsync(cancellationToken);
+            if (record != null)
+            {
+                _logger.LogInformation("{Method} By OrderId {id} get succesfully", "Order", orderId);
+            }
+            else
+            {
+                _logger.LogWarning("{Method} By OrderId {id} not found", "Order", orderId);
+            }
             return record;
         }
 
@@ -269,6 +334,14 @@ namespace App.Infrastructures.Repository.Ef.HomeServices
 
                 }).ToList(),
             }).ToListAsync(cancellationToken);
+            if (record != null)
+            {
+                _logger.LogInformation("{Method} By OrderId {id} get succesfully", "Order", orderId);
+            }
+            else
+            {
+                _logger.LogWarning("{Method} By OrderId {id} not found", "Order", orderId);
+            }
             return record;
         }
 
@@ -290,8 +363,34 @@ namespace App.Infrastructures.Repository.Ef.HomeServices
                ServiceId = x.Service.Id,
                StatusId = x.StatusId,
                StatusName = x.Status.Title,
-
+               Bids= x.Bids.Select(b=> new BidDto
+               {
+                   SuggestedPrice = b.SuggestedPrice,
+                   CreatedAt = b.CreatedAt,
+                   ExpertName = b.AppUser.Name,
+                   ExpertUserId = b.ExpertUserId,
+                   Id = b.Id,
+                   IsApproved = b.IsApproved,
+                   OrderId = b.OrderId,
+               }).ToList(),
+               ServiceComments = x.ServiceComments.Select(x=>new ServiceCommentDto
+               {
+                   CommentText = x.CommentText,
+                   CreatedAt = x.CreatedAt,
+                   CreatedUserId = x.CreatedUserId,
+                   Id = x.Id,
+                   OrderId = x.OrderId,
+                   ServiceId = x.ServiceId
+               }).ToList(),
            }).ToListAsync(cancellationToken);
+            if (result != null)
+            {
+                _logger.LogInformation("{Method} By ExpertId {id} get succesfully", "Order", expert.Id);
+            }
+            else
+            {
+                _logger.LogWarning("{Method} By ExpertId {id} not found", "Order", expert.Id);
+            }
             return result;
         }
     }

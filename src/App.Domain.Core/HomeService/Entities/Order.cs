@@ -10,7 +10,6 @@ namespace App.Domain.Core.HomeService.Entities
         {
             Bids = new HashSet<Bid>();
             OrderFiles = new HashSet<OrderFile>();
-            ServiceComments = new HashSet<ServiceComment>();
         }
 
         public int Id { get; set; }
@@ -29,6 +28,6 @@ namespace App.Domain.Core.HomeService.Entities
         public virtual AppUser Expert { get; set; }
         public virtual ICollection<Bid> Bids { get; set; }
         public virtual ICollection<OrderFile> OrderFiles { get; set; }
-        public virtual ICollection<ServiceComment> ServiceComments { get; set; }
+        public virtual List<ServiceComment> ServiceComments { get; set; } 
     }
 }

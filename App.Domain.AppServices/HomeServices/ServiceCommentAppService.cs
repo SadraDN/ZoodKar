@@ -27,6 +27,11 @@ namespace App.Domain.AppServices.HomeServices
             return await _serviceCommentService.GetAll(cancellationToken);
         }
 
+        public async Task<List<ServiceCommentDto>>? GetAllByOrderId(int orderId, CancellationToken cancellationToken)
+        {
+           return await _serviceCommentService.GetAllByOrderId(orderId, cancellationToken);
+        }
+
         public Task<ServiceCommentDto>? GetByCategoryId(int categoryId, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();

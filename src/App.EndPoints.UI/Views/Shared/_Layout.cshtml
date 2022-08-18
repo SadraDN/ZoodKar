@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="~/assets/css/vendor/font-awesome.min.css">
     <link rel="stylesheet" href="~/assets/css/vendor/materialdesignicons.css">
     <!-- plugin-------------------------------------->
+    <link rel="stylesheet" href="~/chosen/chosen.min.css" />
     <link rel="stylesheet" href="~/assets/css/vendor/bootstrap.css">
     <link rel="stylesheet" href="~/assets/css/vendor/owl.carousel.min.css">
     <link rel="stylesheet" href="~/assets/css/vendor/nice-select.css">
@@ -28,7 +29,7 @@
                             <div class="col-lg-3 pr">
                                 <div class="header-logo row text-right">
                                     <a href="#">
-                                        <img src="~/assets/images/zoodkarLogo.png" width="120px" alt="زودکار" >
+                                        <img src="~/assets/images/zoodkarLogo.png" width="120px" alt="زودکار">
                                     </a>
                                 </div>
                             </div>
@@ -303,8 +304,12 @@
             &copy; 1401 - ZoodKar - <a asp-area="" asp-controller="Home" asp-action="Privacy">حریم خصوصی</a>
         </div>
     </footer>
+        <script src="https://code.jquery.com/jquery-3.6.0.js"
+            integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+            crossorigin="anonymous">
+    </script>
     <!-- file js---------------------------------------------------->
-    <script src="~/assets/js/vendor/jquery-3.2.1.min.js"></script>
+@*    <script src="~/assets/js/vendor/jquery-3.2.1.min.js"></script>*@
     <script src="~/assets/js/vendor/bootstrap.js"></script>
     <!-- plugin----------------------------------------------------->
     <script src="~/assets/js/vendor/owl.carousel.min.js"></script>
@@ -315,7 +320,9 @@
     <script src="~/assets/js/vendor/nouislider.min.js"></script>
     <!-- main js---------------------------------------------------->
     <script src="~/assets/js/main.js"></script>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+@*    <script src="~/lib/jquery/dist/jquery.min.js"></script>*@
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     <script src="~/chosen/chosen.jquery.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

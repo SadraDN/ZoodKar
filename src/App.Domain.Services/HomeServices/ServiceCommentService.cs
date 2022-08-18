@@ -26,6 +26,11 @@ namespace App.Domain.Services.HomeServices
             return await _serviceCommentRepository.GetAll(cancellationToken);
         }
 
+        public async Task<List<ServiceCommentDto>>? GetAllByOrderId(int orderId, CancellationToken cancellationToken)
+        {
+            return await _serviceCommentRepository.GetAllByOrderId(orderId, cancellationToken);
+        }
+
         public async Task<ServiceCommentDto>? GetById(int id, CancellationToken cancellationToken)
         {
            var record = await GetById(id, cancellationToken);

@@ -21,7 +21,6 @@ namespace App.Domain.Core.HomeService.Contracts.Repositories
 
 
 
-
         #endregion
 
 

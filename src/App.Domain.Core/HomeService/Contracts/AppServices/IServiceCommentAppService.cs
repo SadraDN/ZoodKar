@@ -13,6 +13,7 @@ namespace App.Domain.Core.HomeService.Contracts.AppServices
         Task<ServiceCommentDto>? GetByTitle(string title, CancellationToken cancellationToken);
         Task<ServiceCommentDto>? GetByServiceId(int serviceId, CancellationToken cancellationToken);
         Task<ServiceCommentDto>? GetByCategoryId(int categoryId, CancellationToken cancellationToken);
+        Task<List<ServiceCommentDto>>? GetAllByOrderId(int orderId, CancellationToken cancellationToken);
         Task Set(ServiceCommentDto dto, CancellationToken cancellationToken);
         Task Update(ServiceCommentDto dto, CancellationToken cancellationToken);
         Task Delete(int id, CancellationToken cancellationToken);

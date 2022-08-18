@@ -10,6 +10,7 @@ using App.Domain.Core.User.Contracts.Services;
 using App.Domain.Core.User.Entities;
 using App.Domain.Services.HomeServices;
 using App.Domain.Services.User;
+using App.EndPoints.UI.ExceptionHandler;
 using App.Infrastructures.Database.SqlServer;
 using App.Infrastructures.Repository.Ef.HomeServices;
 using App.Infrastructures.Repository.Ef.User;
@@ -20,6 +21,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.Logging.AddSeq(builder.Configuration.GetSection("Seq"));
+
+builder.Services.AddDistributedMemoryCache();
+
+//builder.Services.AddStackExchangeRedisCache(options =>
+//{
+//    options.Configuration = "192.168.150.128:6379,password=123456";
+//    options.InstanceName = "Home";
+//});
 
 builder.Services.ConfigureApplicationCookie(options =>{
     options.LoginPath = "/Account/Login";
@@ -99,6 +108,7 @@ builder.Services.AddScoped<IServiceCommentRepository, ServiceCommentRepository>(
 
 var app = builder.Build();
 
+app.UseExceptionHandling();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -106,6 +116,7 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

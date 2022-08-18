@@ -10,6 +10,7 @@ public class AppUser : IdentityUser<int>
     public int? PictureFileId { get; set; } 
     public string? HomeAddress { get; set; } = null!;
 
+
     public virtual List<AppFile>? AppFiles { get; set; }
     public virtual List<ExpertFavoriteService>? ExpertFavoriteServices { get; set; }
     public virtual List<Bid>? Bids { get; set; }

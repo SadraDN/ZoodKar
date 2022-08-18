@@ -7,6 +7,7 @@ using App.Infrastructures.Database.SqlServer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,17 +23,19 @@ namespace App.Infrastructures.Repository.Ef.User
         private readonly RoleManager<IdentityRole<int>> _roleManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly AppDbContext _appDbContext;
+        private readonly ILogger<AppUserRepository> _logger;
         public AppUserRepository(UserManager<AppUser> UserManager,
             SignInManager<AppUser> SignInManager
             , RoleManager<IdentityRole<int>> RoleManager
             , IHttpContextAccessor httpContextAccessor,
-            AppDbContext appDbContext)
+            AppDbContext appDbContext, ILogger<AppUserRepository> logger)
         {
             _userManager = UserManager;
             _signInManager = SignInManager;
             _roleManager = RoleManager;
             _httpContextAccessor = httpContextAccessor;
             _appDbContext = appDbContext;
+            _logger = logger;
         }
 
         public async Task<IdentityResult> Create(AppUserDto dto)
@@ -45,6 +48,14 @@ namespace App.Infrastructures.Repository.Ef.User
                 Email = dto.Email,
             };
             var result = await _userManager.CreateAsync(user, dto.Password);
+            if (user.Id != 0)
+            {
+                _logger.LogInformation("New {Method} Created succesfully", "User");
+            }
+            else
+            {
+                _logger.LogWarning("Add new {Method} failed", "User");
+            }
 
             if (dto.Roles != null)
             {
@@ -64,6 +75,10 @@ namespace App.Infrastructures.Repository.Ef.User
         public async Task Delete(int id)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null)
+            {
+                _logger.LogWarning("No {Method} found by Id {Id} to delete", "Service", id);
+            }
             await _userManager.DeleteAsync(user);
         }
 
@@ -94,6 +109,14 @@ namespace App.Infrastructures.Repository.Ef.User
             var result = await _userManager.FindByIdAsync(id.ToString());
             var roles = await _userManager.GetRolesAsync(result);
             user.Roles = roles;
+            if (user != null)
+            {
+                _logger.LogInformation("{Method} By UserId {id} get succesfully", "User", id);
+            }
+            else
+            {
+                _logger.LogWarning("{Method} By UserId {id} not found", "User", id);
+            }
             return user;
         }
 
@@ -113,6 +136,7 @@ namespace App.Infrastructures.Repository.Ef.User
                 IsActive = p.IsActive,
                 PictureFileId = p.PictureFileId,
                 UserName = p.UserName,
+                PicUrl = _appDbContext.Files.Where(x => x.Id == p.PictureFileId).FirstOrDefault().FileAddress,
                 ExpertFavoriteServices = p.ExpertFavoriteServices.Select(x => new ExpertFavoriteServiceDto
                 {
                     ServiceId = x.ServiceId,
@@ -136,6 +160,14 @@ namespace App.Infrastructures.Repository.Ef.User
             }
             serach = serach.ToLower();
             users = users.Where(x => x.Email.ToLower() == serach || x.UserName.ToLower().Contains(serach)).ToList();
+            if (users != null)
+            {
+                _logger.LogInformation("All {Method} get succesfully ", "Users");
+            }
+            else
+            {
+                _logger.LogWarning("Get All {Method} failed", "Users");
+            }
             return users;
 
         }
@@ -143,6 +175,14 @@ namespace App.Infrastructures.Repository.Ef.User
         public async Task<int>? GetLoggedUserId()
         {
             var userName = _httpContextAccessor.HttpContext.User.Identity.Name;
+            if (userName != null)
+            {
+                _logger.LogInformation("{Method} By Id {id} get succesfully", "User", userName);
+            }
+            else
+            {
+                _logger.LogWarning("{Method} By CategoryId {id} not found", "User", userName);
+            }
             var user = await _userManager.FindByNameAsync(userName);
             var id = user.Id;
             return id;
@@ -159,12 +199,15 @@ namespace App.Infrastructures.Repository.Ef.User
 
         public async Task<SignInResult> Login(AppUserDto dto, bool rememberMe)
         {
-            return await _signInManager.PasswordSignInAsync(dto.UserName, dto.Password, rememberMe, false);
+            var signIn = await _signInManager.PasswordSignInAsync(dto.UserName, dto.Password, rememberMe, false);
+            _logger.LogInformation("{Method} logged succesfully", "User");
+            return signIn;
         }
 
         public async Task SignOutUser()
         {
             await _signInManager.SignOutAsync();
+            _logger.LogInformation("{Method} sign out succesfully", "User");
         }
 
         public async Task Update(AppUserDto dto)
@@ -183,6 +226,7 @@ namespace App.Infrastructures.Repository.Ef.User
             await _userManager.RemoveFromRolesAsync(user1, roles);
             await _userManager.AddToRolesAsync(user1, dto.Roles);
             await _userManager.UpdateAsync(user1);
+            _logger.LogInformation("{Method} updated succesfully", "User");
         }
 
         public async Task UpdateExpertSkills(int expertId, List<int> services, CancellationToken cancellationToken)
@@ -201,6 +245,7 @@ namespace App.Infrastructures.Repository.Ef.User
                     CreatedAt = DateTime.Now,
                 };
                 await _appDbContext.ExpertFavoriteCategories.AddAsync(skills, cancellationToken);
+                _logger.LogInformation("Favorite Service added succesfully.");
             }
             await _appDbContext.SaveChangesAsync(cancellationToken);
         }
@@ -218,6 +263,7 @@ namespace App.Infrastructures.Repository.Ef.User
             user1.Name = dto.Name;
             user1.UserName = dto.UserName;
             await _userManager.UpdateAsync(user1);
+            _logger.LogInformation("{Method} updated succesfully", "User");
         }
     }
 }

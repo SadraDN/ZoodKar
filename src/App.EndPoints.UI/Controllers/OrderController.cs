@@ -26,7 +26,7 @@ namespace App.EndPoints.UI.Controllers
              , ICategoryAppService CategoryAppService
             , IHttpContextAccessor HttpContextAccessor
             , IAppUserAppService AppUserAppService
-            , IBidAppService BidAppService, 
+            , IBidAppService BidAppService,
             IServiceCommentAppService commentAppService)
         {
             _orderAppService = OrderAppService;
@@ -97,6 +97,7 @@ namespace App.EndPoints.UI.Controllers
         public async Task<IActionResult> OrdersList(CancellationToken cancellationToken)
         {
             var customerId = await _appUserAppService.GetLoggedUserId();
+            ViewBag.CustomerUserId = customerId;
             var orders = await _orderAppService.GetAllByCustomerId(customerId, cancellationToken);
             return View(orders);
         }
@@ -105,7 +106,16 @@ namespace App.EndPoints.UI.Controllers
         public async Task<IActionResult> BidsList(int orderId, CancellationToken cancellationToken)
         {
             var bids = await _orderAppService.GetAllByOrderId(orderId, cancellationToken);
-            return View(bids);
+            var customerId = await _appUserAppService.GetLoggedUserId();
+            foreach (var bid in bids)
+            {
+                if (bid.CustomerUserId == customerId)
+                {
+                    return View(bids);
+                }
+            }
+            return RedirectToAction("Account", "AccessDenied");
+
         }
 
         [Authorize(Roles = "CustomerRole")]
@@ -118,6 +128,8 @@ namespace App.EndPoints.UI.Controllers
         [Authorize(Roles = "ExpertRole")]
         public async Task<IActionResult> ExpertRequest(CancellationToken cancellationToken)
         {
+            var customerId = await _appUserAppService.GetLoggedUserId();
+            ViewBag.CustomerUserId = customerId;
             var expertOrders = await _orderAppService.GetAllExpertOrders(cancellationToken);
             return View(expertOrders);
         }
@@ -125,8 +137,19 @@ namespace App.EndPoints.UI.Controllers
         [Authorize(Roles = "ExpertRole")]
         public async Task<IActionResult> ExpertFinished(CancellationToken cancellationToken)
         {
+            var customerId = await _appUserAppService.GetLoggedUserId();
+            ViewBag.CustomerUserId = customerId;
             var expertOrders = await _orderAppService.GetAllByExpertId(cancellationToken);
             return View(expertOrders);
+        }
+
+        [Authorize(Roles = "ExpertRole")]
+        public async Task<IActionResult> Detail(int orderId, CancellationToken cancellationToken)
+        {
+            var order = await _orderAppService.GetByOrderId(orderId, cancellationToken);
+            var customerId = await _appUserAppService.GetLoggedUserId();
+            return View(order);
+
         }
 
         [Authorize(Roles = "ExpertRole")]
@@ -155,10 +178,17 @@ namespace App.EndPoints.UI.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "ExpertRole")]
+        public async Task<IActionResult> DeleteBid(int bidId, CancellationToken cancellationToken)
+        {
+            await _bidAppService.Delete(bidId, cancellationToken);
+            return RedirectToAction("ExpertRequest");
+        }
+
         [Authorize(Roles = "CustomerRole,ExpertRole")]
 
         [HttpGet]
-        public async Task<IActionResult> Comment(int orderId, int serviceId)
+        public IActionResult Comment(int orderId, int serviceId)
         {
             ViewBag.OrderId = orderId;
             ViewBag.ServiceId = serviceId;
@@ -166,7 +196,7 @@ namespace App.EndPoints.UI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Comment(ServiceCommentDto model,int orderId,int serviceId,CancellationToken cancellationToken)
+        public async Task<IActionResult> Comment(ServiceCommentDto model, int orderId, int serviceId, CancellationToken cancellationToken)
         {
             var loggedUser = await _appUserAppService.GetLoggedUserId();
             var comment = new ServiceCommentDto()
@@ -179,6 +209,21 @@ namespace App.EndPoints.UI.Controllers
             };
             await _commentAppService.Set(comment, cancellationToken);
             return RedirectToAction("OrdersList");
+        }
+
+        [Authorize(Roles = "CustomerRole,ExpertRole")]
+        public async Task<IActionResult> ShowComments(int orderId, CancellationToken cancellationToken)
+        {
+            var comments = await _commentAppService.GetAllByOrderId(orderId, cancellationToken);
+            return View(comments);
+        }
+
+        [Authorize(Roles = "ExpertRole")]
+        public async Task<IActionResult> NextStatus(int orderId, CancellationToken cancellationToken)
+        {
+            var order = await _orderAppService.GetByOrderId(orderId, cancellationToken);
+            order.StatusId++;
+            return RedirectToAction("Home", "Index");
         }
     }
 }

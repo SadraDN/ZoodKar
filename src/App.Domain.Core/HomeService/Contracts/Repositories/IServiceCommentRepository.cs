@@ -13,6 +13,7 @@ namespace App.Domain.Core.HomeService.Contracts.Repositories
 
         Task<List<ServiceCommentDto>> GetAll(CancellationToken cancellationToken);
         Task<ServiceCommentDto>? GetByOrderId(int orderId, CancellationToken cancellationToken);
+        Task<List<ServiceCommentDto>>? GetAllByOrderId(int orderId, CancellationToken cancellationToken);
         Task<ServiceCommentDto>? GetById(int id, CancellationToken cancellationToken);
 
         #endregion

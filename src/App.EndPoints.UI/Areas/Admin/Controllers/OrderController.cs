@@ -66,7 +66,7 @@ namespace App.EndPoints.UI.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(OrderUpdateVM model, CancellationToken cancellationToken)
+        public async Task<IActionResult> Edit(OrderDto model, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {

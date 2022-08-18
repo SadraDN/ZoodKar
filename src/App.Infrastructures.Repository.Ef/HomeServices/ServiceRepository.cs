@@ -3,6 +3,7 @@ using App.Domain.Core.HomeService.Dtos;
 using App.Domain.Core.HomeService.Entities;
 using App.Infrastructures.Database.SqlServer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,9 +15,11 @@ namespace App.Infrastructures.Repository.Ef.HomeServices
     public class ServiceRepository : IServiceRepository
     {
         private readonly AppDbContext _context;
-        public ServiceRepository(AppDbContext context)
+        private readonly ILogger<ServiceRepository> _logger;
+        public ServiceRepository(AppDbContext context, ILogger<ServiceRepository> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public async Task Add(ServiceDto dto, CancellationToken cancellationToken)
@@ -31,6 +34,14 @@ namespace App.Infrastructures.Repository.Ef.HomeServices
             };
             await _context.AddAsync(record, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
+            if (record.Id != 0)
+            {
+                _logger.LogInformation("New {Method} added succesfully", "Service");
+            }
+            else
+            {
+                _logger.LogWarning("Add new {Method} failed", "Service");
+            }
             foreach (var file in dto.AppFiles)
             {
                 ServiceFile serviceFiles = new ServiceFile
@@ -41,7 +52,17 @@ namespace App.Infrastructures.Repository.Ef.HomeServices
                     CreatedAt = DateTime.Now,
                 };
                 record.ServiceFiles.Add(serviceFiles);
+                if (serviceFiles.Id != 0)
+                {
+                    _logger.LogInformation("{Method} File added succesfully", "Service");
+                }
+                else
+                {
+                    _logger.LogWarning("Add new file for {Method} failed", "Service");
+                }
+
             }
+
             await _context.SaveChangesAsync(cancellationToken);
         }
         public async Task Update(ServiceDto dto, CancellationToken cancellationToken)
@@ -51,7 +72,6 @@ namespace App.Infrastructures.Repository.Ef.HomeServices
             record.Title = dto.Title;
             record.ShortDescription = dto.ShortDescription;
             record.Price = dto.Price;
-
             var serviceFiles = new List<ServiceFile>();
             foreach (var file in dto.AppFiles)
             {
@@ -67,14 +87,19 @@ namespace App.Infrastructures.Repository.Ef.HomeServices
             }
             record.ServiceFiles = serviceFiles;
             await _context.SaveChangesAsync(cancellationToken);
+            _logger.LogInformation("{Method} updated succesfully", "Service");
         }
 
         public async Task Delete(int id, CancellationToken cancellationToken)
         {
-
             var record = await _context.Services.Where(p => p.Id == id).SingleAsync(cancellationToken);
+            if (record == null)
+            {
+                _logger.LogWarning("No {Method} found by Id {Id} to delete","Service",id);
+            }
             _context.Remove(record!);
             await _context.SaveChangesAsync(cancellationToken);
+            _logger.LogInformation("{Method} deleted succesfully", "Service");
         }
 
         public async Task<List<ServiceDto>> GetAll(CancellationToken cancellationToken)
@@ -96,6 +121,14 @@ namespace App.Infrastructures.Repository.Ef.HomeServices
                     FileAddress = x.File.FileAddress,
                 }).ToList(),
             }).ToListAsync(cancellationToken);
+            if(service!= null)
+            {
+                _logger.LogInformation("All {Method} get succesfully ", "Services");
+            }
+            else
+            {
+                _logger.LogWarning("Get All {Method} failed","Services");
+            }
             return service;
         }
 
@@ -109,6 +142,14 @@ namespace App.Infrastructures.Repository.Ef.HomeServices
                 ShortDescription = p.ShortDescription,
                 Price = p.Price,
             }).SingleOrDefaultAsync(cancellationToken);
+            if (record != null)
+            {
+                _logger.LogInformation("{Method} By CategoryId {id} get succesfully", "Service", categoryId);
+            }
+            else
+            {
+                _logger.LogWarning("{Method} By CategoryId {id} not found", "Service", categoryId);
+            }
             return record;
         }
 
@@ -122,6 +163,14 @@ namespace App.Infrastructures.Repository.Ef.HomeServices
                 ShortDescription = p.ShortDescription,
                 Price = p.Price,
             }).SingleOrDefaultAsync(cancellationToken);
+            if (record != null)
+            {
+                _logger.LogInformation("{Method} By ServiceId {id} get succesfully", "Service", serviceId);
+            }
+            else
+            {
+                _logger.LogWarning("{Method} By ServiceId {id} not found", "Service", serviceId);
+            }
             return record;
         }
 
@@ -135,6 +184,14 @@ namespace App.Infrastructures.Repository.Ef.HomeServices
                 ShortDescription = p.ShortDescription,
                 Price = p.Price,
             }).SingleOrDefaultAsync(cancellationToken);
+            if (record != null)
+            {
+                _logger.LogInformation("{Method} By Title {Title} get succesfully", "Service", title);
+            }
+            else
+            {
+                _logger.LogWarning("{Method} By Title {Title} not found", "Service", title);
+            }
             return record;
         }
 

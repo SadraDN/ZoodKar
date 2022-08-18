@@ -1,4 +1,6 @@
-﻿namespace App.Domain.Core.HomeService.Entities
+﻿using App.Domain.Core.User.Entities;
+
+namespace App.Domain.Core.HomeService.Entities
 {
     public partial class ServiceComment
     {
@@ -11,5 +13,6 @@
 
         public virtual Order Order { get; set; } = null!;
         public virtual Service Service { get; set; } = null!;
+
     }
 }

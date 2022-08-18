@@ -41,6 +41,7 @@ namespace App.EndPoints.UI.Areas.Admin.Controllers
                 Name = x.Name,
                 UserName = x.UserName,
                 Email = x.Email,
+                PicUrl = x.PicUrl,
                 Roles = x.Roles.ToList()
             }).ToList();
             return View(model);

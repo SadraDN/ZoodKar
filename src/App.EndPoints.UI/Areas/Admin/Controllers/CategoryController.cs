@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace App.EndPoints.UI.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class CategoryController : Controller
     {
         private readonly ICategoryAppService _categoryAppService;
@@ -19,25 +20,24 @@ namespace App.EndPoints.UI.Areas.Admin.Controllers
             return View(categories);
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> Create(CancellationToken cancellationToken)
-        //{
-        //    return View();
-        //}
-        //[HttpPost]
-        //public async Task<IActionResult> Create(CategoryDto model, CancellationToken cancellationToken)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var service = new CategoryDto
-        //        {
-        //            Title = model.Title,
-                    
-        //        };
-        //        await _categoryAppService.Set(service, serviceFile, cancellationToken);
-        //        return RedirectToAction("Index");
-        //    }
-        //    return View(model);
-        //}
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Create(CategoryDto model, CancellationToken cancellationToken)
+        {
+            if (ModelState.IsValid)
+            {
+                var service = new CategoryDto
+                {
+                    Title = model.Title,
+                };
+                await _categoryAppService.Set(service, cancellationToken);
+                return RedirectToAction("Index");
+            }
+            return View(model);
+        }
     }
 }
