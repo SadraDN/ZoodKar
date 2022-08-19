@@ -1,0 +1,37 @@
+﻿@using App.Domain.Core.HomeService.Dtos
+@using App.EndPoints.UI.ExtensionMethods
+@model List<OrderDto>
+<h3> لیست سفارشات در حال انجام</h3>
+<table class="table table-striped table-light">
+    <thead>
+        <tr>
+            <th>شماره سفارش</th>
+            <th>تاریخ ثبت</th>
+            <th>نام سرویس</th>
+            <th>نام مشتری</th>
+            <th>قیمت پایه</th>
+            <th>آدرس</th>
+            <th>زمان درخواست</th>
+            <th>اعمالات</th>
+
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var order in Model)
+        {
+            <tr>
+                <td>@order.Id</td>
+                <td>@order.CreatedAt</td>
+                <td>@order.ServiceName</td>
+                <td>@order.CustomerUserName</td>
+                <td>@order.ServiceBasePrice</td>
+                <td>@order.SerivceAddress</td>
+                <td>@PersianDateString.ToPersianDate(@order.ServiceDate)</td>
+                <td>
+                    <a asp-controller="Order" asp-action="Detail" asp-route-orderId="@order.Id" class="btn btn-primary">جزئیات</a>
+            </tr>
+
+        }
+    </tbody>
+</table>

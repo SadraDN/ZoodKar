@@ -393,5 +393,44 @@ namespace App.Infrastructures.Repository.Ef.HomeServices
             }
             return result;
         }
+
+        public async Task<List<OrderDto>?> GetAllProcceingOrders(AppUserDto expert, CancellationToken cancellationToken)
+        {
+            var result = await _context.Orders.Where(x => x.FinalExpertUserId == expert.Id && expert.Services.Select(x => x.Id).Contains(x.Service.Id) && x.StatusId == 3).Select(x => new OrderDto
+            {
+                Id = x.Id,
+                CreatedAt = x.CreatedAt,
+                CustomerUserId = x.CustomerUserId,
+                CustomerUserName = x.Customer.Name,
+                FinalExpertUserId = x.FinalExpertUserId,
+                FinalExpertUserName = x.Expert.Name,
+                SerivceAddress = x.SerivceAddress,
+                ServiceBasePrice = x.Service.Price,
+                ServiceDate = x.ServiceDate,
+                ServiceName = x.Service.Title,
+                ServiceId = x.Service.Id,
+                StatusId = x.StatusId,
+                StatusName = x.Status.Title,
+                ServiceComments = x.ServiceComments.Select(x => new ServiceCommentDto
+                {
+                    CommentText = x.CommentText,
+                    CreatedAt = x.CreatedAt,
+                    CreatedUserId = x.CreatedUserId,
+                    Id = x.Id,
+                    OrderId = x.OrderId,
+                    ServiceId = x.ServiceId
+                }).ToList(),
+
+            }).ToListAsync(cancellationToken);
+            if (result != null)
+            {
+                _logger.LogInformation("{Method} By CustomerId {id} get succesfully", "Order", expert);
+            }
+            else
+            {
+                _logger.LogWarning("{Method} By CustomerId {id} not found", "Order", expert);
+            }
+            return result;
+        }
     }
 }

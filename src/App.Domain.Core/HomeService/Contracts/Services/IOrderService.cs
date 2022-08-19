@@ -16,6 +16,7 @@ namespace App.Domain.Core.HomeService.Contracts.Services
         Task<OrderDto>? GetByOrderId(int orderId, CancellationToken cancellationToken);
         Task<List<OrderDto>?> GetAllByOrderId(int orderId, CancellationToken cancellationToken);
         Task<List<OrderDto>?> GetAllExpertOrders(AppUserDto expert, CancellationToken cancellationToken);
+        Task<List<OrderDto>?> GetAllProcceingOrders(AppUserDto expert, CancellationToken cancellationToken);
         Task Set(OrderDto dto, CancellationToken cancellationToken);
         Task Update(OrderDto dto, CancellationToken cancellationToken);
         Task Delete(int id, CancellationToken cancellationToken);

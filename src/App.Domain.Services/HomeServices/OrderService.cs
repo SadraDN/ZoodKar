@@ -68,5 +68,10 @@ namespace App.Domain.Services.HomeServices
         {
            return await _orderRepository.GetAllExpertOrders(expert, cancellationToken);
         }
+
+        public async Task<List<OrderDto>?> GetAllProcceingOrders(AppUserDto expert, CancellationToken cancellationToken)
+        {
+            return await _orderRepository.GetAllProcceingOrders(expert, cancellationToken);
+        }
     }
 }

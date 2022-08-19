@@ -100,5 +100,13 @@ namespace App.Domain.AppServices.HomeServices
             var orders = await _orderService.GetAllExpertOrders(result,cancellationToken);
             return orders;
         }
+
+        public async Task<List<OrderDto>?> GetAllProcceingOrders(CancellationToken cancellationToken)
+        {
+            var expert = await _appUserService.GetLoggedUserId();
+            var result = await _appUserService.Get(expert);
+            var orders = await _orderService.GetAllProcceingOrders(result, cancellationToken);
+            return orders;
+        }
     }
 }

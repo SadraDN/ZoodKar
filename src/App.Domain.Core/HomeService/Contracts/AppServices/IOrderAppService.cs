@@ -19,5 +19,6 @@ namespace App.Domain.Core.HomeService.Contracts.AppServices
         Task Update(OrderDto dto, CancellationToken cancellationToken);
         Task Delete(int id, CancellationToken cancellationToken);
         Task<List<OrderDto>?> GetAllExpertOrders(CancellationToken cancellationToken);
+        Task<List<OrderDto>?> GetAllProcceingOrders(CancellationToken cancellationToken);
     }
 }

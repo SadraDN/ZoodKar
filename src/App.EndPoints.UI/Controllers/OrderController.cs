@@ -144,6 +144,15 @@ namespace App.EndPoints.UI.Controllers
         }
 
         [Authorize(Roles = "ExpertRole")]
+        public async Task<IActionResult> ExpertProccesing(CancellationToken cancellationToken)
+        {
+            var customerId = await _appUserAppService.GetLoggedUserId();
+            ViewBag.CustomerUserId = customerId;
+            var expertOrders = await _orderAppService.GetAllProcceingOrders(cancellationToken);
+            return View(expertOrders);
+        }
+
+        [Authorize(Roles = "ExpertRole,CustomerRole")]
         public async Task<IActionResult> Detail(int orderId, CancellationToken cancellationToken)
         {
             var order = await _orderAppService.GetByOrderId(orderId, cancellationToken);
@@ -223,7 +232,8 @@ namespace App.EndPoints.UI.Controllers
         {
             var order = await _orderAppService.GetByOrderId(orderId, cancellationToken);
             order.StatusId++;
-            return RedirectToAction("Home", "Index");
+           await _orderAppService.Update(order,cancellationToken);
+            return RedirectToAction("Index", "Home");
         }
     }
 }
